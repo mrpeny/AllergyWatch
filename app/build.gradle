@@ -41,6 +41,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
 
     // Barcode scanning
+    implementation 'com.google.firebase:firebase-core:16.0.3'
     implementation 'com.google.firebase:firebase-ml-vision:17.0.0'
 
     // Advertisement
