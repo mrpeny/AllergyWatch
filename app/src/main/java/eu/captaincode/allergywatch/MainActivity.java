@@ -3,6 +3,7 @@ package eu.captaincode.allergywatch;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
@@ -12,6 +13,8 @@ import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CameraMetadata;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.media.Image;
+import android.media.ImageReader;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -22,8 +25,20 @@ import android.util.Log;
 import android.util.Size;
 import android.view.Surface;
 import android.view.TextureView;
+import android.widget.Toast;
 
-import java.util.Collections;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.ml.vision.FirebaseVision;
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetector;
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOptions;
+import com.google.firebase.ml.vision.common.FirebaseVisionImage;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
@@ -33,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     private int neededCameraFacing = CameraMetadata.LENS_FACING_BACK;
     private TextureView textureView;
     private String cameraId;
+    private ImageReader mImageReader;
+    private Size mImageReaderOutputSize;
 
     private HandlerThread backgroundThread;
     private Handler backgroundHandler;
@@ -50,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
                     Log.i(LOG_TAG, "SurfaceTexture size changed: " + width + "x" + height);
-                    //textureView.getBitmap().compress(Bitmap.CompressFormat.JPEG, 100, );
                 }
 
                 @Override
@@ -104,6 +120,19 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private ImageReader.OnImageAvailableListener mOnImageAvailableListener = new ImageReader.OnImageAvailableListener() {
+        @Override
+        public void onImageAvailable(ImageReader reader) {
+            Log.i(LOG_TAG, "Image available with format: " + reader.getImageFormat());
+            Image image = reader.acquireLatestImage();
+            detectBarcode(image);
+            if (image != null) {
+                image.close();
+            }
+        }
+    };
+    private int mCameraRotation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,10 +169,22 @@ public class MainActivity extends AppCompatActivity {
                 Integer cameraFacing = cameraCharacteristics.get(CameraCharacteristics.LENS_FACING);
                 if (cameraFacing != null && cameraFacing == neededCameraFacing) {
                     Log.d(LOG_TAG, "Camera with id=" + cameraId + " is facing back");
+                    mCameraRotation = cameraCharacteristics.get(CameraCharacteristics.SENSOR_ORIENTATION);
+                    Log.d(LOG_TAG, "Camera rotation=" + mCameraRotation);
+
                     StreamConfigurationMap streamConfigurationMap = cameraCharacteristics
                             .get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
                     assert streamConfigurationMap != null;
                     outputSize = streamConfigurationMap.getOutputSizes(SurfaceTexture.class)[0];
+
+                    mImageReaderOutputSize = streamConfigurationMap.getOutputSizes(ImageFormat.YUV_420_888)[0];
+                    mImageReader = ImageReader.newInstance(
+                            mImageReaderOutputSize.getWidth() / 16,
+                            mImageReaderOutputSize.getHeight() / 16,
+                            ImageFormat.YUV_420_888,
+                            2);
+                    mImageReader.setOnImageAvailableListener(mOnImageAvailableListener, backgroundHandler);
+
                     this.cameraId = cameraId;
                 }
             }
@@ -175,15 +216,19 @@ public class MainActivity extends AppCompatActivity {
             surfaceTexture.setDefaultBufferSize(outputSize.getWidth(), outputSize.getHeight());
             Surface previewSurface = new Surface(surfaceTexture);
 
+            Surface mImageSurface = mImageReader.getSurface();
+
             captureRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
             captureRequestBuilder.addTarget(previewSurface);
+            captureRequestBuilder.addTarget(mImageSurface);
 
-            cameraDevice.createCaptureSession(Collections.singletonList(previewSurface),
+            cameraDevice.createCaptureSession(Arrays.asList(previewSurface, mImageSurface),
                     new CameraCaptureSession.StateCallback() {
                         @Override
                         public void onConfigured(@NonNull CameraCaptureSession session) {
                             Log.i(LOG_TAG, "CaptureSession.onConfigured");
                             if (cameraDevice == null) {
+                                Log.e(LOG_TAG, "Cameradevice was null");
                                 return;
                             }
 
@@ -243,5 +288,48 @@ public class MainActivity extends AppCompatActivity {
             backgroundThread = null;
             backgroundHandler = null;
         }
+    }
+
+    private void detectBarcode(Image image) {
+        if (image == null) {
+            return;
+        }
+        Log.i(LOG_TAG, "Detecting barcode");
+        FirebaseVisionBarcodeDetectorOptions options =
+                new FirebaseVisionBarcodeDetectorOptions.Builder().setBarcodeFormats(
+                        FirebaseVisionBarcode.FORMAT_EAN_13
+                ).build();
+
+        FirebaseVisionImage firebaseImageBarcode = FirebaseVisionImage.fromMediaImage(image, 0);
+
+        FirebaseVisionBarcodeDetector detector = FirebaseVision.getInstance()
+                .getVisionBarcodeDetector(options);
+
+        Task<List<FirebaseVisionBarcode>> result = detector.detectInImage(firebaseImageBarcode)
+                .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionBarcode>>() {
+                    @Override
+                    public void onSuccess(List<FirebaseVisionBarcode> firebaseVisionBarcodes) {
+                        Log.d(LOG_TAG, "Imagedetection.onSuccess()");
+                        for (FirebaseVisionBarcode barcode : firebaseVisionBarcodes) {
+                            String rawValue = barcode.getRawValue();
+                            Log.d(LOG_TAG, "Detected barcode: " + rawValue);
+                            Toast.makeText(MainActivity.this, rawValue, Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(LOG_TAG, "Imagedetection.onFailure()");
+                        e.printStackTrace();
+
+                    }
+                }).addOnCompleteListener(new OnCompleteListener<List<FirebaseVisionBarcode>>() {
+                    @Override
+                    public void onComplete(@NonNull Task<List<FirebaseVisionBarcode>> task) {
+                        Log.d(LOG_TAG, "Imagedetection.onComplete()");
+
+                    }
+                });
+
     }
 }
