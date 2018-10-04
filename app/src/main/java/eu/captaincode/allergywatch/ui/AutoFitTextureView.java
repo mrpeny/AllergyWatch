@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package eu.captaincode.allergywatch;
+package eu.captaincode.allergywatch.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;

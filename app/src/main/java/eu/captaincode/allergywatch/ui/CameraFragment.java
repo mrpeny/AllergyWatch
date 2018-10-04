@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package eu.captaincode.allergywatch;
+package eu.captaincode.allergywatch.ui;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -41,7 +41,6 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
-import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -68,19 +67,22 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
-public class Camera2VideoFragment extends Fragment implements View.OnClickListener,
-        FirebaseBarcodeDetector.BarcodeDetectionListener {
+import eu.captaincode.allergywatch.R;
+import eu.captaincode.allergywatch.barcode.FirebaseBarcodeDetector;
 
-    public static final long LOCK_FOCUS_DELAY_ON_FOCUSED = 5000;
-    public static final long LOCK_FOCUS_DELAY_ON_UNFOCUSED = 1000;
-    private static final SparseIntArray DEFAULT_ORIENTATIONS = new SparseIntArray();
-    private static final SparseIntArray INVERSE_ORIENTATIONS = new SparseIntArray();
-    private static final String TAG = "Camera2VideoFragment";
+public class CameraFragment extends Fragment implements
+        FirebaseBarcodeDetector.BarcodeDetectionListener {
+    private static final String TAG = CameraFragment.class.getSimpleName();
+
+    private static final long LOCK_FOCUS_DELAY_ON_FOCUSED = 5000;
+    private static final long LOCK_FOCUS_DELAY_ON_UNFOCUSED = 1000;
     private static final int REQUEST_CAMERA_PERMISSIONS = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
     private static final String[] CAMERA_PERMISSIONS = {
             Manifest.permission.CAMERA,
     };
+    private static final SparseIntArray DEFAULT_ORIENTATIONS = new SparseIntArray();
+    private static final SparseIntArray INVERSE_ORIENTATIONS = new SparseIntArray();
 
     static {
         DEFAULT_ORIENTATIONS.append(Surface.ROTATION_0, 90);
@@ -102,6 +104,9 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
      * An {@link AutoFitTextureView} for camera preview.
      */
     private AutoFitTextureView mTextureView;
+    /**
+     * The ID of the selected camera.
+     */
     private String mCameraId;
     /**
      * A reference to the opened {@link CameraDevice}.
@@ -121,9 +126,8 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
      */
     private Size mImageReaderSize;
     /**
-     * MediaRecorder
+     * ImageReader
      */
-    private MediaRecorder mMediaRecorder;
     private ImageReader mImageReader;
     /**
      * An additional thread for running tasks that shouldn't block the UI.
@@ -152,65 +156,10 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
     // Preview logic
     private boolean mFlashEnabled;
 
-    // Fragment callbacks
+
     // AutoFocus helpers
     private Integer mLastAfState;
     private Handler mUiHandler = new Handler();
-    private CameraCaptureSession.CaptureCallback mCaptureCallback
-            = new CameraCaptureSession.CaptureCallback() {
-
-        private void process(CaptureResult result) {
-            // We have nothing to do when the camera preview is working normally.
-            Integer afState = result.get(CaptureResult.CONTROL_AF_STATE);
-            if (afState != null && !afState.equals(mLastAfState)) {
-                switch (afState) {
-                    case CaptureResult.CONTROL_AF_STATE_INACTIVE:
-                        Log.d(TAG, "CaptureResult.CONTROL_AF_STATE_INACTIVE");
-                        lockAutoFocus();
-                        break;
-                    case CaptureResult.CONTROL_AF_STATE_ACTIVE_SCAN:
-                        Log.d(TAG, "CaptureResult.CONTROL_AF_STATE_ACTIVE_SCAN");
-                        break;
-                    case CaptureResult.CONTROL_AF_STATE_FOCUSED_LOCKED:
-                        Log.d(TAG, "CaptureResult.CONTROL_AF_STATE_FOCUSED_LOCKED");
-                        mUiHandler.removeCallbacks(mLockAutoFocusRunnable);
-                        mUiHandler.postDelayed(mLockAutoFocusRunnable, LOCK_FOCUS_DELAY_ON_FOCUSED);
-                        break;
-                    case CaptureResult.CONTROL_AF_STATE_NOT_FOCUSED_LOCKED:
-                        mUiHandler.removeCallbacks(mLockAutoFocusRunnable);
-                        mUiHandler.postDelayed(mLockAutoFocusRunnable, LOCK_FOCUS_DELAY_ON_UNFOCUSED);
-                        Log.d(TAG, "CaptureResult.CONTROL_AF_STATE_NOT_FOCUSED_LOCKED");
-                        break;
-                    case CaptureResult.CONTROL_AF_STATE_PASSIVE_UNFOCUSED:
-                        mUiHandler.removeCallbacks(mLockAutoFocusRunnable);
-                        Log.d(TAG, "CaptureResult.CONTROL_AF_STATE_PASSIVE_UNFOCUSED");
-                        break;
-                    case CaptureResult.CONTROL_AF_STATE_PASSIVE_SCAN:
-                        Log.d(TAG, "CaptureResult.CONTROL_AF_STATE_PASSIVE_SCAN");
-                        break;
-                    case CaptureResult.CONTROL_AF_STATE_PASSIVE_FOCUSED:
-                        mUiHandler.removeCallbacks(mLockAutoFocusRunnable);
-                        Log.d(TAG, "CaptureResult.CONTROL_AF_STATE_PASSIVE_FOCUSED");
-                        break;
-                }
-            }
-            mLastAfState = afState;
-        }
-
-        @Override
-        public void onCaptureProgressed(@NonNull CameraCaptureSession session,
-                                        @NonNull CaptureRequest request,
-                                        @NonNull CaptureResult partialResult) {
-            process(partialResult);
-        }
-
-        @Override
-        public void onCaptureCompleted(@NonNull CameraCaptureSession session,
-                                       @NonNull CaptureRequest request,
-                                       @NonNull TotalCaptureResult result) {
-            process(result);
-        }
-    };
     /**
      * {@link CameraDevice.StateCallback} is called when {@link CameraDevice} changes its status.
      */
@@ -280,11 +229,67 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
             lockAutoFocus();
         }
     };
+    private CameraCaptureSession.CaptureCallback mCaptureCallback
+            = new CameraCaptureSession.CaptureCallback() {
+
+        private void process(CaptureResult result) {
+            // We have nothing to do when the camera preview is working normally.
+            Integer afState = result.get(CaptureResult.CONTROL_AF_STATE);
+            if (afState != null && !afState.equals(mLastAfState)) {
+                switch (afState) {
+                    case CaptureResult.CONTROL_AF_STATE_INACTIVE:
+                        Log.d(TAG, "CaptureResult.CONTROL_AF_STATE_INACTIVE");
+                        lockAutoFocus();
+                        break;
+                    case CaptureResult.CONTROL_AF_STATE_ACTIVE_SCAN:
+                        Log.d(TAG, "CaptureResult.CONTROL_AF_STATE_ACTIVE_SCAN");
+                        break;
+                    case CaptureResult.CONTROL_AF_STATE_FOCUSED_LOCKED:
+                        Log.d(TAG, "CaptureResult.CONTROL_AF_STATE_FOCUSED_LOCKED");
+                        mUiHandler.removeCallbacks(mLockAutoFocusRunnable);
+                        mUiHandler.postDelayed(mLockAutoFocusRunnable, LOCK_FOCUS_DELAY_ON_FOCUSED);
+                        break;
+                    case CaptureResult.CONTROL_AF_STATE_NOT_FOCUSED_LOCKED:
+                        mUiHandler.removeCallbacks(mLockAutoFocusRunnable);
+                        mUiHandler.postDelayed(mLockAutoFocusRunnable, LOCK_FOCUS_DELAY_ON_UNFOCUSED);
+                        Log.d(TAG, "CaptureResult.CONTROL_AF_STATE_NOT_FOCUSED_LOCKED");
+                        break;
+                    case CaptureResult.CONTROL_AF_STATE_PASSIVE_UNFOCUSED:
+                        mUiHandler.removeCallbacks(mLockAutoFocusRunnable);
+                        Log.d(TAG, "CaptureResult.CONTROL_AF_STATE_PASSIVE_UNFOCUSED");
+                        break;
+                    case CaptureResult.CONTROL_AF_STATE_PASSIVE_SCAN:
+                        Log.d(TAG, "CaptureResult.CONTROL_AF_STATE_PASSIVE_SCAN");
+                        break;
+                    case CaptureResult.CONTROL_AF_STATE_PASSIVE_FOCUSED:
+                        mUiHandler.removeCallbacks(mLockAutoFocusRunnable);
+                        Log.d(TAG, "CaptureResult.CONTROL_AF_STATE_PASSIVE_FOCUSED");
+                        break;
+                }
+            }
+            mLastAfState = afState;
+        }
+
+        @Override
+        public void onCaptureProgressed(@NonNull CameraCaptureSession session,
+                                        @NonNull CaptureRequest request,
+                                        @NonNull CaptureResult partialResult) {
+            process(partialResult);
+        }
+
+        @Override
+        public void onCaptureCompleted(@NonNull CameraCaptureSession session,
+                                       @NonNull CaptureRequest request,
+                                       @NonNull TotalCaptureResult result) {
+            process(result);
+        }
+    };
 
     // Threads
+    // Fragment callbacks
 
-    public static Camera2VideoFragment newInstance() {
-        return new Camera2VideoFragment();
+    public static CameraFragment newInstance() {
+        return new CameraFragment();
     }
 
     /**
@@ -345,13 +350,13 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_camera, container, false);
     }
 
     @Override
-    public void onViewCreated(final View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, Bundle savedInstanceState) {
         mTextureView = view.findViewById(R.id.texture);
     }
 
@@ -360,7 +365,12 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
         super.onResume();
         startBackgroundThread();
         if (mTextureView.isAvailable()) {
-            openCamera(mTextureView.getWidth(), mTextureView.getHeight());
+            try {
+                openCamera(mTextureView.getWidth(), mTextureView.getHeight());
+            } catch (Exception e) {
+                Log.e(TAG, "Failed to open camera: " + e.getMessage());
+                e.printStackTrace();
+            }
         } else {
             mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
         }
@@ -413,15 +423,25 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
         try {
             Log.d(TAG, "tryAcquire");
             if (!mCameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
+                Log.e(TAG, "Time out waiting to lock camera opening.");
                 throw new RuntimeException("Time out waiting to lock camera opening.");
             }
-            mCameraId = manager.getCameraIdList()[0];
+
+            for (String cameraId : manager.getCameraIdList()) {
+                CameraCharacteristics cameraCharacteristics =
+                        manager.getCameraCharacteristics(cameraId);
+                Integer lensFacing = cameraCharacteristics.get(CameraCharacteristics.LENS_FACING);
+                if (lensFacing != null && lensFacing == CameraCharacteristics.LENS_FACING_BACK) {
+                    mCameraId = cameraId;
+                }
+            }
 
             // Choose the sizes for camera preview and video recording
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(mCameraId);
             StreamConfigurationMap map = characteristics
                     .get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             if (map == null) {
+                Log.e(TAG, "Cannot get available preview/ImageReader sizes");
                 throw new RuntimeException("Cannot get available preview/ImageReader sizes");
             }
 
@@ -447,14 +467,16 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
 
             manager.openCamera(mCameraId, mStateCallback, null);
         } catch (CameraAccessException e) {
-            Toast.makeText(activity, "Cannot access the camera.", Toast.LENGTH_SHORT).show();
-            activity.finish();
+            ErrorDialog.newInstance(getString(R.string.camera_error))
+                    .show(getActivity().getSupportFragmentManager(), FRAGMENT_DIALOG);
         } catch (NullPointerException e) {
             // Currently an NPE is thrown when the Camera2API is used but not supported on the
             // device this code runs.
             ErrorDialog.newInstance(getString(R.string.camera_error))
                     .show(getActivity().getSupportFragmentManager(), FRAGMENT_DIALOG);
         } catch (InterruptedException e) {
+            ErrorDialog.newInstance(getString(R.string.camera_error))
+                    .show(getActivity().getSupportFragmentManager(), FRAGMENT_DIALOG);
             throw new RuntimeException("Interrupted while trying to lock camera opening.");
         }
     }
@@ -498,23 +520,10 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
                 mCameraDevice.close();
                 mCameraDevice = null;
             }
-            if (null != mMediaRecorder) {
-                mMediaRecorder.release();
-                mMediaRecorder = null;
-            }
         } catch (InterruptedException e) {
             throw new RuntimeException("Interrupted while trying to lock camera closing.");
         } finally {
             mCameraOpenCloseLock.release();
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (mFlashEnabled) {
-            mFlashEnabled = false;
-        } else {
-            mFlashEnabled = true;
         }
     }
 
@@ -593,8 +602,8 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
             mPreviewBuilder.set(CaptureRequest.CONTROL_AF_MODE,
                     CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
         }
-            mPreviewBuilder.set(CaptureRequest.CONTROL_AE_MODE,
-                    CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
+        mPreviewBuilder.set(CaptureRequest.CONTROL_AE_MODE,
+                CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
     }
 
     private void lockAutoFocus() {
@@ -675,6 +684,19 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
         return res;
     }
 
+    // Permission logic
+
+    /**
+     * Requests permissions needed for recording video.
+     */
+    private void requestCameraPermissions() {
+        if (shouldShowRequestPermissionRationale(CAMERA_PERMISSIONS)) {
+            new ConfirmationDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
+        } else {
+            requestPermissions(CAMERA_PERMISSIONS, REQUEST_CAMERA_PERMISSIONS);
+        }
+    }
+
     /**
      * Gets whether you should show UI with rationale for requesting permissions.
      *
@@ -688,19 +710,6 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
             }
         }
         return false;
-    }
-
-    // Permission logic
-
-    /**
-     * Requests permissions needed for recording video.
-     */
-    private void requestCameraPermissions() {
-        if (shouldShowRequestPermissionRationale(CAMERA_PERMISSIONS)) {
-            new ConfirmationDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
-        } else {
-            requestPermissions(CAMERA_PERMISSIONS, REQUEST_CAMERA_PERMISSIONS);
-        }
     }
 
     @Override
@@ -762,6 +771,7 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
             return dialog;
         }
 
+        @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             final Activity activity = getActivity();
@@ -780,6 +790,7 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
 
     public static class ConfirmationDialog extends DialogFragment {
 
+        @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             final Fragment parent = getParentFragment();

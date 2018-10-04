@@ -1,7 +1,9 @@
-package eu.captaincode.allergywatch;
+package eu.captaincode.allergywatch.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+
+import eu.captaincode.allergywatch.R;
 
 public class MainActivity extends FragmentActivity {
     @Override
@@ -10,7 +12,7 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
         if (null == savedInstanceState) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, Camera2VideoFragment.newInstance())
+                    .replace(R.id.container, CameraFragment.newInstance())
                     .commit();
         }
     }

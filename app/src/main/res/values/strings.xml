@@ -4,4 +4,5 @@
     <string name="description_info">info</string>
     <string name="permission_request">This sample needs permission for camera and audio recording.</string>
     <string name="camera_error">This device doesn\'t support Camera2 API.</string>
+    <string name="camera_error_general">Problem occurred while opening the camera. Pleaset try again!</string>
 </resources>

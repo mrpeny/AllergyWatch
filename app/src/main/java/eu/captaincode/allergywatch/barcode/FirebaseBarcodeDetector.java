@@ -1,4 +1,4 @@
-package eu.captaincode.allergywatch;
+package eu.captaincode.allergywatch.barcode;
 
 import android.media.Image;
 import android.support.annotation.NonNull;
@@ -80,7 +80,7 @@ public class FirebaseBarcodeDetector {
                 .addOnCompleteListener(onCompleteListener);
     }
 
-    interface BarcodeDetectionListener {
+    public interface BarcodeDetectionListener {
         void onBarcodeDetected(String detectedBarcode);
     }
 }
