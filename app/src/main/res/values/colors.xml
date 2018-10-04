@@ -3,4 +3,6 @@
     <color name="colorPrimary">#FFC107</color>
     <color name="colorPrimaryDark">#FFA000</color>
     <color name="colorAccent">#536DFE</color>
+
+    <color name="barcode_aim">#ed0000</color>
 </resources>
