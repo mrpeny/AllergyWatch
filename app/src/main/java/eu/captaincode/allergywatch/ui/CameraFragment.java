@@ -467,15 +467,15 @@ public class CameraFragment extends Fragment implements
 
             manager.openCamera(mCameraId, mStateCallback, null);
         } catch (CameraAccessException e) {
-            ErrorDialog.newInstance(getString(R.string.camera_error))
+            ErrorDialog.newInstance(getString(R.string.camera_error_general))
                     .show(getActivity().getSupportFragmentManager(), FRAGMENT_DIALOG);
         } catch (NullPointerException e) {
             // Currently an NPE is thrown when the Camera2API is used but not supported on the
             // device this code runs.
-            ErrorDialog.newInstance(getString(R.string.camera_error))
+            ErrorDialog.newInstance(getString(R.string.camera_error_general))
                     .show(getActivity().getSupportFragmentManager(), FRAGMENT_DIALOG);
         } catch (InterruptedException e) {
-            ErrorDialog.newInstance(getString(R.string.camera_error))
+            ErrorDialog.newInstance(getString(R.string.camera_error_general))
                     .show(getActivity().getSupportFragmentManager(), FRAGMENT_DIALOG);
             throw new RuntimeException("Interrupted while trying to lock camera opening.");
         }
