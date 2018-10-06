@@ -10,35 +10,23 @@ import eu.captaincode.allergywatch.repository.DataRepository;
 
 public class ProductViewModel extends AndroidViewModel {
 
-    private Application mApplication;
-    private DataRepository mRepository;
+    private final LiveData<Product> mObservableProduct;
+    public ObservableField<Product> product = new ObservableField<>();
+
     private String mCode;
 
-    private LiveData<Product> mProductLiveData;
-
-    public ObservableField<Product> observableProduct = new ObservableField<>();
-
-    public ProductViewModel(Application application, DataRepository repository, String code) {
+    public ProductViewModel(Application application, DataRepository repository, final String code) {
         super(application);
-        this.mApplication = application;
-        this.mRepository = repository;
         this.mCode = code;
-        init(code);
+
+        mObservableProduct = repository.getProduct(mCode);
     }
 
-    public void init(String code) {
-/*        if (this.mProductLiveData != null) {
-            return;
-        }*/
-
-        mProductLiveData = mRepository.getProduct(mCode);
+    public LiveData<Product> getObservableProduct() {
+        return this.mObservableProduct;
     }
 
-    public LiveData<Product> getProductLiveData() {
-        return this.mProductLiveData;
-    }
-
-    public void setObeservableProduct(Product product) {
-        this.observableProduct.set(product);
+    public void setProduct(Product product) {
+        this.product.set(product);
     }
 }

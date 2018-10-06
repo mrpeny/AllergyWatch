@@ -15,6 +15,7 @@ import eu.captaincode.allergywatch.AppExecutors;
 import eu.captaincode.allergywatch.database.converter.DateConverter;
 import eu.captaincode.allergywatch.database.dao.ProductDao;
 import eu.captaincode.allergywatch.database.entity.Product;
+import eu.captaincode.allergywatch.ui.MainActivity;
 
 @Database(entities = {Product.class}, version = 1)
 @TypeConverters(DateConverter.class)
@@ -31,7 +32,7 @@ public abstract class MyDatabase extends RoomDatabase {
             synchronized (LOCK) {
                 sInstance = Room.databaseBuilder(context.getApplicationContext(),
                         MyDatabase.class, DATABASE_NAME)
-                        /*.addCallback(new Callback() {
+                        .addCallback(new Callback() {
                             @Override
                             public void onCreate(@NonNull SupportSQLiteDatabase db) {
                                 executors.diskIO().execute(new Runnable() {
@@ -42,22 +43,14 @@ public abstract class MyDatabase extends RoomDatabase {
                                         } catch (InterruptedException ignored) {
                                         }
                                         Product product = new Product();
-                                        product.setProductName("Some rice");
-                                        product.setStatusVerbose("Kamu status");
+                                        product.setStatusVerbose("Dump status");
                                         product.setCode(MainActivity.CODE_PRODUCT);
                                         MyDatabase.getInstance(context.getApplicationContext(),
                                                 executors).productDao().save(product);
                                     }
-
-
                                 });
                             }
-                        })*/
-                        .build();
-                /*if (sInstance == null) {
-                    sInstance = buildDatabase(context.getApplicationContext(), executors);
-                    sInstance.updateDatabaseCreated(context);
-                }*/
+                        }).build();
             }
         }
         return sInstance;
@@ -75,7 +68,6 @@ public abstract class MyDatabase extends RoomDatabase {
                             public void run() {
                                 MyDatabase database = MyDatabase.getInstance(applicationContext,
                                         executors);
-                                // TODO: Initialize pre-defined data
                                 //List<Product> products = new ArrayList<>();
 
                                 //insertData(database, products);

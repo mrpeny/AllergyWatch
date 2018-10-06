@@ -32,10 +32,9 @@ public class DataRepository {
     private final OffWebService mOffWebService;
     private final ProductDao mProductDao;
     private final Retrofit mRetrofit;
-    //private final AppExecutors mExecutors;
     private final Executor mExecutor;
 
-    public DataRepository(MyDatabase database,  Executor executor) {
+    public DataRepository(MyDatabase database, Executor executor) {
         this.mDatabase = database;
         this.mExecutor = executor;
         this.mProductDao = database.productDao();
@@ -46,30 +45,6 @@ public class DataRepository {
         this.mOffWebService = mRetrofit.create(OffWebService.class);
     }
 
-    /*    public DataRepository(MyDatabase database, AppExecutors executors) {
-        this.mDatabase = database;
-        this.mExecutors = executors;
-        this.mProductDao = database.productDao();
-
-        mRetrofit = new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
-                .baseUrl(BASE_URL)
-                .build();
-        mOffWebService = mRetrofit.create(OffWebService.class);
-
-    }
-
-    public static DataRepository getInstance(MyDatabase database, AppExecutors executors) {
-        if (sInstance == null) {
-            synchronized (DataRepository.class) {
-                if (sInstance == null) {
-                    sInstance = new DataRepository(database, executors);
-                }
-            }
-        }
-        return sInstance;
-    }
-    */
     public static DataRepository getInstance(MyDatabase database, Executor executor) {
         if (sInstance == null) {
             synchronized (DataRepository.class) {
@@ -90,6 +65,10 @@ public class DataRepository {
         mExecutor.execute(new Runnable() {
             @Override
             public void run() {
+                boolean productExists = (mProductDao.hasProduct(
+                        code, DataRepository.this.getMaxRefreshTime(new Date())) != null);
+
+                if (!productExists) {
                     mOffWebService.getProduct(code).enqueue(new Callback<Product>() {
                         @Override
                         public void onResponse(Call<Product> call, final Response<Product> response) {
@@ -100,6 +79,7 @@ public class DataRepository {
                                 public void run() {
                                     Product product = response.body();
                                     product.setLastRefresh(new Date());
+                                    // Product is parsed successfully at this point as I see
                                     mProductDao.save(product);
                                 }
                             });
@@ -110,7 +90,7 @@ public class DataRepository {
                             Log.e(TAG, "Failed to connect to OFF Web API");
                         }
                     });
-
+                }
             }
         });
     }
