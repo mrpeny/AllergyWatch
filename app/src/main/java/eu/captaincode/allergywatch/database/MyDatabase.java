@@ -9,7 +9,6 @@ import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import eu.captaincode.allergywatch.AppExecutors;
@@ -17,24 +16,48 @@ import eu.captaincode.allergywatch.database.converter.DateConverter;
 import eu.captaincode.allergywatch.database.dao.ProductDao;
 import eu.captaincode.allergywatch.database.entity.Product;
 
-@Database(entities = {Product.class}, version = 1, exportSchema = false)
+@Database(entities = {Product.class}, version = 1)
 @TypeConverters(DateConverter.class)
 public abstract class MyDatabase extends RoomDatabase {
 
     private static MyDatabase sInstance;
+    private static final Object LOCK = new Object();
 
     public static final String DATABASE_NAME = "allergy_watch_db.db";
     private MutableLiveData<Boolean> mIsDatabaseCreated = new MutableLiveData<>();
 
-    public abstract ProductDao productDao();
-
     public static MyDatabase getInstance(final Context context, final AppExecutors executors) {
         if (sInstance == null) {
-            synchronized (MyDatabase.class) {
-                if (sInstance == null) {
+            synchronized (LOCK) {
+                sInstance = Room.databaseBuilder(context.getApplicationContext(),
+                        MyDatabase.class, DATABASE_NAME)
+                        /*.addCallback(new Callback() {
+                            @Override
+                            public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                                executors.diskIO().execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            Thread.sleep(4000);
+                                        } catch (InterruptedException ignored) {
+                                        }
+                                        Product product = new Product();
+                                        product.setProductName("Some rice");
+                                        product.setStatusVerbose("Kamu status");
+                                        product.setCode(MainActivity.CODE_PRODUCT);
+                                        MyDatabase.getInstance(context.getApplicationContext(),
+                                                executors).productDao().save(product);
+                                    }
+
+
+                                });
+                            }
+                        })*/
+                        .build();
+                /*if (sInstance == null) {
                     sInstance = buildDatabase(context.getApplicationContext(), executors);
                     sInstance.updateDatabaseCreated(context);
-                }
+                }*/
             }
         }
         return sInstance;
@@ -53,9 +76,9 @@ public abstract class MyDatabase extends RoomDatabase {
                                 MyDatabase database = MyDatabase.getInstance(applicationContext,
                                         executors);
                                 // TODO: Initialize pre-defined data
-                                List<Product> products = new ArrayList<>();
+                                //List<Product> products = new ArrayList<>();
 
-                                insertData(database, products);
+                                //insertData(database, products);
 
                                 database.setDatabaseCreated();
                             }
@@ -83,4 +106,7 @@ public abstract class MyDatabase extends RoomDatabase {
             }
         });
     }
+
+    public abstract ProductDao productDao();
+
 }

@@ -9,10 +9,10 @@ import java.util.concurrent.Executors;
 
 public class AppExecutors {
 
+    private static final Object LOCK = new Object();
+    private static  AppExecutors sInstance;
     private final Executor mDiskIO;
-
     private final Executor mNetworkIO;
-
     private final Executor mMainThread;
 
     public AppExecutors(Executor diskIO, Executor networkIO, Executor mainThread) {
@@ -21,9 +21,14 @@ public class AppExecutors {
         this.mMainThread = mainThread;
     }
 
-    public AppExecutors() {
-        this(Executors.newSingleThreadExecutor(), Executors.newFixedThreadPool(3),
-                new MainThreadExecutor());
+    public static AppExecutors getInstance() {
+        if (sInstance == null) {
+            synchronized (LOCK) {
+                sInstance = new AppExecutors(Executors.newSingleThreadExecutor(), Executors.newFixedThreadPool(3),
+                        new MainThreadExecutor());
+            }
+        }
+        return sInstance;
     }
 
     public Executor diskIO() {

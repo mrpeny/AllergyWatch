@@ -7,7 +7,6 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
-import java.util.List;
 
 @Entity
 public class Product {
@@ -20,22 +19,25 @@ public class Product {
     @SerializedName("code")
     @Expose
     private String code;
+    @SerializedName("status_verbose")
+    @Expose
+    private String statusVerbose;
     @SerializedName("product_name")
     @Expose
-    private String productName;
+    /*private String productName;
     @SerializedName("serving_size")
     @Expose
     private String servingSize;
     @SerializedName("allergens")
     @Expose
-    private String allergens;
+    private String allergens;*/
 
     private Date lastRefresh;
 
     public Product() {
     }
 
-    public Product(Long id, String code, String productName, String servingSize, String allergens,
+    /*public Product(Long id, String code, String productName, String servingSize, String allergens,
                    List<String> allergensHierarchy, Date lastRefresh) {
         this.id = id;
         this.code = code;
@@ -44,7 +46,7 @@ public class Product {
         this.allergens = allergens;
         //this.allergensHierarchy = allergensHierarchy;
         this.lastRefresh = lastRefresh;
-    }
+    }*/
 
     public Long getId() {
         return id;
@@ -61,8 +63,8 @@ public class Product {
     public void setCode(String code) {
         this.code = code;
     }
-
-    public String getProductName() {
+/*
+       public String getProductName() {
         return productName;
     }
 
@@ -86,7 +88,7 @@ public class Product {
         this.allergens = allergens;
     }
 
-/*    public List<String> getAllergensHierarchy() {
+    public List<String> getAllergensHierarchy() {
         return allergensHierarchy;
     }
 
@@ -100,5 +102,13 @@ public class Product {
 
     public void setLastRefresh(Date lastRefresh) {
         this.lastRefresh = lastRefresh;
+    }
+
+    public String getStatusVerbose() {
+        return statusVerbose;
+    }
+
+    public void setStatusVerbose(String statusVerbose) {
+        this.statusVerbose = statusVerbose;
     }
 }
