@@ -20,6 +20,8 @@ android {
 }
 
 dependencies {
+    def room_version = "1.1.1"
+
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // Android support libraries
@@ -34,16 +36,20 @@ dependencies {
     // Networking
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
 
-    // Image processing
-    implementation 'com.squareup.picasso:picasso:2.71828'
-
     // JSON parsing
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
 
+    // Persistence
+    implementation "android.arch.persistence.room:runtime:$room_version"
+    annotationProcessor "android.arch.persistence.room:compiler:$room_version"
+
     // Barcode scanning
     implementation 'com.google.firebase:firebase-core:16.0.3'
     implementation 'com.google.firebase:firebase-ml-vision:17.0.0'
+
+    // Image processing
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
     // Advertisement
     implementation 'com.google.android.gms:play-services-ads:15.0.1'
