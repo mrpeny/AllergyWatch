@@ -1,6 +1,7 @@
 package eu.captaincode.allergywatch.repository;
 
 import android.arch.lifecycle.LiveData;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -24,7 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class DataRepository {
     private static final String TAG = DataRepository.class.getSimpleName();
 
-    private static int FRESH_TIMEOUT_IN_MINUTES = 3;
+    private static int FRESH_TIMEOUT_IN_MINUTES = 2;
     private static String BASE_URL = "https://world.openfoodfacts.org/api/v0/";
     private static DataRepository sInstance;
 
@@ -34,7 +35,7 @@ public class DataRepository {
     private final Retrofit mRetrofit;
     private final Executor mExecutor;
 
-    public DataRepository(MyDatabase database, Executor executor) {
+    private DataRepository(MyDatabase database, Executor executor) {
         this.mDatabase = database;
         this.mExecutor = executor;
         this.mProductDao = database.productDao();
@@ -65,29 +66,34 @@ public class DataRepository {
         mExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                boolean productExists = (mProductDao.hasProduct(
-                        code, DataRepository.this.getMaxRefreshTime(new Date())) != null);
+                Product product = mProductDao.hasProduct(
+                        code, DataRepository.this.getMaxRefreshTime(new Date()));
+                boolean productExists = (product != null);
 
                 if (!productExists) {
                     mOffWebService.getProduct(code).enqueue(new Callback<Product>() {
                         @Override
-                        public void onResponse(Call<Product> call, final Response<Product> response) {
+                        public void onResponse(@NonNull Call<Product> call,
+                                               @NonNull final Response<Product> response) {
                             Toast.makeText(AllergyWatchApp.context, "Refreshed from network",
                                     Toast.LENGTH_SHORT).show();
                             mExecutor.execute(new Runnable() {
                                 @Override
                                 public void run() {
                                     Product product = response.body();
-                                    product.setLastRefresh(new Date());
-                                    // Product is parsed successfully at this point as I see
+                                    if (product != null) {
+                                        Log.e(TAG, "Response body deserialization failed");
+                                        product.setLastRefresh(new Date());
+                                    }
                                     mProductDao.save(product);
                                 }
                             });
                         }
 
                         @Override
-                        public void onFailure(Call<Product> call, Throwable t) {
-                            Log.e(TAG, "Failed to connect to OFF Web API");
+                        public void onFailure(@NonNull Call<Product> call, @NonNull Throwable t) {
+                            Log.e(TAG, "Failed to connect to OFF Web API:" + t.getMessage());
+                            t.printStackTrace();
                         }
                     });
                 }

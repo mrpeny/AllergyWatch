@@ -9,7 +9,7 @@ import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import java.util.List;
+import java.util.Date;
 
 import eu.captaincode.allergywatch.AppExecutors;
 import eu.captaincode.allergywatch.database.converter.DateConverter;
@@ -21,64 +21,57 @@ import eu.captaincode.allergywatch.ui.MainActivity;
 @TypeConverters(DateConverter.class)
 public abstract class MyDatabase extends RoomDatabase {
 
-    private static MyDatabase sInstance;
+    private static final String DATABASE_NAME = "allergy_watch_db.db";
     private static final Object LOCK = new Object();
-
-    public static final String DATABASE_NAME = "allergy_watch_db.db";
+    private static MyDatabase sInstance;
     private MutableLiveData<Boolean> mIsDatabaseCreated = new MutableLiveData<>();
 
     public static MyDatabase getInstance(final Context context, final AppExecutors executors) {
         if (sInstance == null) {
             synchronized (LOCK) {
-                sInstance = Room.databaseBuilder(context.getApplicationContext(),
-                        MyDatabase.class, DATABASE_NAME)
-                        .addCallback(new Callback() {
-                            @Override
-                            public void onCreate(@NonNull SupportSQLiteDatabase db) {
-                                executors.diskIO().execute(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            Thread.sleep(4000);
-                                        } catch (InterruptedException ignored) {
-                                        }
-                                        Product product = new Product();
-                                        product.setStatusVerbose("Dump status");
-                                        product.setCode(MainActivity.CODE_PRODUCT);
-                                        MyDatabase.getInstance(context.getApplicationContext(),
-                                                executors).productDao().save(product);
-                                    }
-                                });
-                            }
-                        }).build();
+                sInstance = buildDatabase(context, executors);
+                sInstance.updateDatabaseCreated(context);
             }
         }
         return sInstance;
     }
 
-    private static MyDatabase buildDatabase(final Context applicationContext, final AppExecutors executors) {
+    private static MyDatabase buildDatabase(final Context context, final AppExecutors executors) {
 
-        return Room.databaseBuilder(applicationContext, MyDatabase.class, DATABASE_NAME)
+        return Room.databaseBuilder(context.getApplicationContext(),
+                MyDatabase.class, DATABASE_NAME)
                 .addCallback(new Callback() {
                     @Override
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {
-                        super.onCreate(db);
                         executors.diskIO().execute(new Runnable() {
                             @Override
                             public void run() {
-                                MyDatabase database = MyDatabase.getInstance(applicationContext,
-                                        executors);
-                                //List<Product> products = new ArrayList<>();
-
-                                //insertData(database, products);
-
-                                database.setDatabaseCreated();
+                                try {
+                                    Thread.sleep(4000);
+                                } catch (InterruptedException ignored) {
+                                }
+                                insertInitialData(context, executors);
                             }
                         });
-
                     }
                 }).build();
     }
+
+    private static void insertInitialData(Context context, AppExecutors executors) {
+        final MyDatabase database = MyDatabase.getInstance(context.getApplicationContext(), executors);
+        database.runInTransaction(new Runnable() {
+            @Override
+            public void run() {
+                Product product = new Product();
+                product.setStatusVerbose("Dump status");
+                product.setLastRefresh(new Date());
+                product.setCode(MainActivity.CODE_PRODUCT);
+                database.productDao().save(product);
+            }
+        });
+    }
+
+    public abstract ProductDao productDao();
 
     private void setDatabaseCreated() {
         mIsDatabaseCreated.postValue(true);
@@ -89,16 +82,4 @@ public abstract class MyDatabase extends RoomDatabase {
             setDatabaseCreated();
         }
     }
-
-    private static void insertData(final MyDatabase database, final List<Product> products) {
-        database.runInTransaction(new Runnable() {
-            @Override
-            public void run() {
-                database.productDao().insertAll(products);
-            }
-        });
-    }
-
-    public abstract ProductDao productDao();
-
 }

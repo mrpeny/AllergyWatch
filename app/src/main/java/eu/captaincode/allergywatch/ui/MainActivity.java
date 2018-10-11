@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 
 import eu.captaincode.allergywatch.R;
-import eu.captaincode.allergywatch.database.MyDatabase;
 import eu.captaincode.allergywatch.database.entity.Product;
 import eu.captaincode.allergywatch.databinding.ActivityMainBinding;
 import eu.captaincode.allergywatch.ui.fragment.ProductFragment;
@@ -16,9 +15,9 @@ import eu.captaincode.allergywatch.viewmodel.ProductViewModel;
 import eu.captaincode.allergywatch.viewmodel.ProductViewModelFactory;
 
 public class MainActivity extends FragmentActivity {
-    public static final String CODE_PRODUCT = "737628064502";
 
-    private MyDatabase mDatabase;
+    public static final String CODE_PRODUCT = "0737628064502";
+
     private ActivityMainBinding mBinding;
 
     @Override
@@ -39,7 +38,6 @@ public class MainActivity extends FragmentActivity {
         viewModel.getObservableProduct().observe(this, new Observer<Product>() {
             @Override
             public void onChanged(@Nullable Product product) {
-                // Here I ALWAYS get null product
                 viewModel.setProduct(product);
             }
         });

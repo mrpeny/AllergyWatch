@@ -25,4 +25,7 @@ public interface ProductDao {
 
     @Query("SELECT * FROM product WHERE code = :code AND lastRefresh > :lastRefreshMax LIMIT 1")
     Product hasProduct(String code, Date lastRefreshMax);
+
+    @Query("SELECT * FROM product WHERE code = :code LIMIT 1")
+    Product loadByCode(String code);
 }
