@@ -63,7 +63,7 @@ public abstract class MyDatabase extends RoomDatabase {
             @Override
             public void run() {
                 Product product = new Product();
-                product.setStatusVerbose("Dump status");
+                product.setProductName("Fake Nutella");
                 product.setLastRefresh(new Date());
                 product.setCode(MainActivity.CODE_PRODUCT);
                 database.productDao().save(product);

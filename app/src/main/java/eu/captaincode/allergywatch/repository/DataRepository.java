@@ -11,6 +11,7 @@ import java.util.Date;
 
 import eu.captaincode.allergywatch.AppExecutors;
 import eu.captaincode.allergywatch.api.OffWebService;
+import eu.captaincode.allergywatch.api.ProductSearchResponse;
 import eu.captaincode.allergywatch.database.MyDatabase;
 import eu.captaincode.allergywatch.database.dao.ProductDao;
 import eu.captaincode.allergywatch.database.entity.Product;
@@ -66,26 +67,30 @@ public class DataRepository {
                 boolean productExists = (product != null);
 
                 if (!productExists) {
-                    mOffWebService.getProduct(code).enqueue(new Callback<Product>() {
+                    mOffWebService.getProduct(code).enqueue(new Callback<ProductSearchResponse>() {
                         @Override
-                        public void onResponse(@NonNull Call<Product> call,
-                                               @NonNull final Response<Product> response) {
+                        public void onResponse(@NonNull Call<ProductSearchResponse> call,
+                                               @NonNull final Response<ProductSearchResponse> response) {
                             Log.i(TAG, "Data refreshed from the network");
                             mExecutors.networkIO().execute(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Product product = response.body();
-                                    if (product != null) {
-                                        Log.e(TAG, "Response body deserialization failed");
-                                        product.setLastRefresh(new Date());
+                                    ProductSearchResponse productSearchResponse = response.body();
+                                    if (productSearchResponse != null) {
+
+                                        Product refreshedProduct = productSearchResponse.getProduct();
+                                        refreshedProduct.setLastRefresh(new Date());
+                                        Log.e(TAG, "Saving product with code: " +
+                                                refreshedProduct.getCode());
+                                        mProductDao.save(refreshedProduct);
                                     }
-                                    mProductDao.save(product);
                                 }
                             });
                         }
 
                         @Override
-                        public void onFailure(@NonNull Call<Product> call, @NonNull Throwable t) {
+                        public void onFailure(@NonNull Call<ProductSearchResponse> call,
+                                              @NonNull Throwable t) {
                             Log.e(TAG, "Failed to connect to OFF Web API:" + t.getMessage());
                             t.printStackTrace();
                         }

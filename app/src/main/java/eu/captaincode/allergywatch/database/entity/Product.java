@@ -12,25 +12,27 @@ import java.util.Date;
 public class Product {
 
     @PrimaryKey()
-    private int id;
+    private int productId;
+
     @SerializedName("code")
     @Expose
     private String code;
-    @SerializedName("status_verbose")
+
+    @SerializedName("product_name")
     @Expose
-    private String statusVerbose;
+    private String productName;
 
     private Date lastRefresh;
 
     public Product() {
     }
 
-    public int getId() {
-        return id;
+    public int getProductId() {
+        return productId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 
     public String getCode() {
@@ -41,6 +43,14 @@ public class Product {
         this.code = code;
     }
 
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
     public Date getLastRefresh() {
         return lastRefresh;
     }
@@ -49,11 +59,4 @@ public class Product {
         this.lastRefresh = lastRefresh;
     }
 
-    public String getStatusVerbose() {
-        return statusVerbose;
-    }
-
-    public void setStatusVerbose(String statusVerbose) {
-        this.statusVerbose = statusVerbose;
-    }
 }

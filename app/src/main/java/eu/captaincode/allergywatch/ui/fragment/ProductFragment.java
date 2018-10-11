@@ -5,6 +5,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -25,7 +26,7 @@ public class ProductFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_product, container, false);
 
         return mBinding.getRoot();
@@ -43,7 +44,7 @@ public class ProductFragment extends Fragment {
             @Override
             public void onChanged(@Nullable Product product) {
                 if (product != null)
-                    mBinding.tvProductName.setText(product.getStatusVerbose());
+                    mBinding.tvProductName.setText(product.getProductName());
             }
         });
     }
