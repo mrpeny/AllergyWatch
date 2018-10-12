@@ -16,7 +16,7 @@ import eu.captaincode.allergywatch.viewmodel.ProductViewModelFactory;
 
 public class MainActivity extends FragmentActivity {
 
-    public static final String CODE_PRODUCT = "0737628064502";
+    public static final String CODE_PRODUCT = "3017620429484";
 
     private ActivityMainBinding mBinding;
 

@@ -7,6 +7,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Product {
@@ -21,6 +22,10 @@ public class Product {
     @SerializedName("product_name")
     @Expose
     private String productName;
+
+    @SerializedName("allergens_tags")
+    @Expose
+    private List<String> allergensTags;
 
     private Date lastRefresh;
 
@@ -59,4 +64,11 @@ public class Product {
         this.lastRefresh = lastRefresh;
     }
 
+    public List<String> getAllergensTags() {
+        return allergensTags;
+    }
+
+    public void setAllergensTags(List<String> allergensTags) {
+        this.allergensTags = allergensTags;
+    }
 }

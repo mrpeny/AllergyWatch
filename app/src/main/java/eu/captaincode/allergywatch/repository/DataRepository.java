@@ -24,7 +24,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class DataRepository {
     private static final String TAG = DataRepository.class.getSimpleName();
 
-    private static final int FRESH_TIMEOUT_IN_MINUTES = 2;
+    private static final int FRESH_TIMEOUT_IN_MINUTES = 1;
     private static final String BASE_URL = "https://world.openfoodfacts.org/api/v0/";
     private static DataRepository sInstance;
 

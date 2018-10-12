@@ -12,13 +12,14 @@ import android.support.annotation.NonNull;
 import java.util.Date;
 
 import eu.captaincode.allergywatch.AppExecutors;
+import eu.captaincode.allergywatch.database.converter.AllergenListConverter;
 import eu.captaincode.allergywatch.database.converter.DateConverter;
 import eu.captaincode.allergywatch.database.dao.ProductDao;
 import eu.captaincode.allergywatch.database.entity.Product;
 import eu.captaincode.allergywatch.ui.MainActivity;
 
 @Database(entities = {Product.class}, version = 1)
-@TypeConverters(DateConverter.class)
+@TypeConverters({DateConverter.class, AllergenListConverter.class})
 public abstract class MyDatabase extends RoomDatabase {
 
     private static final String DATABASE_NAME = "allergy_watch_db.db";
