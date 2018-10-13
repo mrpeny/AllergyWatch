@@ -21,6 +21,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -64,11 +65,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import eu.captaincode.allergywatch.R;
 import eu.captaincode.allergywatch.barcode.FirebaseBarcodeDetector;
+import eu.captaincode.allergywatch.viewmodel.MainActivityViewModel;
 
 public class CameraFragment extends Fragment implements
         FirebaseBarcodeDetector.BarcodeDetectionListener {
@@ -343,10 +346,18 @@ public class CameraFragment extends Fragment implements
         }
     }
 
+    private String mDetectedBarcode = "";
+
     @Override
     public void onBarcodeDetected(String detectedBarcode) {
-        Toast.makeText(getActivity(), "Detected barcode: " + detectedBarcode, Toast.LENGTH_SHORT)
+        if (mDetectedBarcode.equals(detectedBarcode)) {
+            return;
+        }
+        this.mDetectedBarcode = detectedBarcode;
+        Toast.makeText(getActivity(), detectedBarcode, Toast.LENGTH_SHORT)
                 .show();
+        ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(MainActivityViewModel.class)
+                .setBarcode(detectedBarcode);
     }
 
     @Override
@@ -374,6 +385,7 @@ public class CameraFragment extends Fragment implements
         } else {
             mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
         }
+        this.mDetectedBarcode = "";
     }
 
     @Override
@@ -736,7 +748,7 @@ public class CameraFragment extends Fragment implements
 
     private boolean hasPermissionsGranted(String[] permissions) {
         for (String permission : permissions) {
-            if (ActivityCompat.checkSelfPermission(getActivity(), permission)
+            if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), permission)
                     != PackageManager.PERMISSION_GRANTED) {
                 return false;
             }
