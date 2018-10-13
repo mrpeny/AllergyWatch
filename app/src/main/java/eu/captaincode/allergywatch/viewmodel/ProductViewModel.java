@@ -13,13 +13,12 @@ public class ProductViewModel extends AndroidViewModel {
     private final LiveData<Product> mObservableProduct;
     public ObservableField<Product> product = new ObservableField<>();
 
-    private String mCode;
+    public String mCode;
 
-    public ProductViewModel(Application application, DataRepository repository, final String code) {
+    ProductViewModel(Application application, DataRepository repository, final String code) {
         super(application);
         this.mCode = code;
-
-        mObservableProduct = repository.getProduct(mCode);
+        this.mObservableProduct = repository.getProduct(mCode);
     }
 
     public LiveData<Product> getObservableProduct() {

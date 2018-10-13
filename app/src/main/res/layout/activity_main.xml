@@ -2,14 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-        <import type="android.view.View" />
-
-        <variable
-            name="productViewModel"
-            type="eu.captaincode.allergywatch.viewmodel.ProductViewModel" />
-    </data>
-
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,15 +11,7 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#080">
-
-            <TextView
-                android:id="@+id/tv_main"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@{productViewModel.product.productName}" />
-        </FrameLayout>
+            android:background="#080" />
 
     </android.support.design.widget.CoordinatorLayout>
 

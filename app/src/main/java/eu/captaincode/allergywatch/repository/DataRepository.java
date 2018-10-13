@@ -26,6 +26,7 @@ public class DataRepository {
 
     private static final int FRESH_TIMEOUT_IN_MINUTES = 1;
     private static final String BASE_URL = "https://world.openfoodfacts.org/api/v0/";
+    private static final int CODE_PRODUCT_FOUND = 1;
     private static DataRepository sInstance;
 
     private final OffWebService mOffWebService;
@@ -76,13 +77,16 @@ public class DataRepository {
                                 @Override
                                 public void run() {
                                     ProductSearchResponse productSearchResponse = response.body();
-                                    if (productSearchResponse != null) {
+                                    if (productSearchResponse != null &&
+                                            productSearchResponse.getStatus() == CODE_PRODUCT_FOUND) {
 
                                         Product refreshedProduct = productSearchResponse.getProduct();
                                         refreshedProduct.setLastRefresh(new Date());
                                         Log.i(TAG, "Saving product with code: " +
                                                 refreshedProduct.getCode());
                                         mProductDao.save(refreshedProduct);
+                                    } else {
+                                        Log.d(TAG, "Search result was null or returned with error");
                                     }
                                 }
                             });

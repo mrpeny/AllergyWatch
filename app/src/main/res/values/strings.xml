@@ -2,7 +2,11 @@
     <string name="app_name">AllergyWatch</string>
     <string name="record">Record</string>
     <string name="description_info">info</string>
+    <!-- CAMERA -->
     <string name="permission_request">This sample needs permission for camera and audio recording.</string>
     <string name="camera_error">This device doesn\'t support Camera2 API.</string>
     <string name="camera_error_general">Problem occurred while opening the camera. Pleaset try again!</string>
+
+    <!-- PRODUCT DETAIL -->
+    <string name="product_not_found">No product found with code \"%s\"</string>
 </resources>

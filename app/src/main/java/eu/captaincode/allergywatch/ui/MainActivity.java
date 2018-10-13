@@ -1,22 +1,16 @@
 package eu.captaincode.allergywatch.ui;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 
 import eu.captaincode.allergywatch.R;
-import eu.captaincode.allergywatch.database.entity.Product;
 import eu.captaincode.allergywatch.databinding.ActivityMainBinding;
 import eu.captaincode.allergywatch.ui.fragment.ProductFragment;
-import eu.captaincode.allergywatch.viewmodel.ProductViewModel;
-import eu.captaincode.allergywatch.viewmodel.ProductViewModelFactory;
 
 public class MainActivity extends FragmentActivity {
 
-    public static final String CODE_PRODUCT = "3017620429484";
+    public static final String CODE_PRODUCT = "30176204294844";
 
     private ActivityMainBinding mBinding;
 
@@ -25,34 +19,21 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        ProductViewModelFactory viewModelFactory = new ProductViewModelFactory(getApplication(), CODE_PRODUCT);
-        final ProductViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(ProductViewModel.class);
+        showFragment(savedInstanceState);
 
-        mBinding.setProductViewModel(viewModel);
-
-        subscribeToModel(viewModel);
-
-    }
-
-    private void subscribeToModel(final ProductViewModel viewModel) {
-        viewModel.getObservableProduct().observe(this, new Observer<Product>() {
-            @Override
-            public void onChanged(@Nullable Product product) {
-                viewModel.setProduct(product);
-            }
-        });
     }
 
     private void showFragment(Bundle savedInstanceState) {
-        ProductFragment fragment = new ProductFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(ProductFragment.KEY_PRODUCT_CODE, CODE_PRODUCT);
-        fragment.setArguments(bundle);
+        if (savedInstanceState == null) {
+            ProductFragment fragment = new ProductFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString(ProductFragment.KEY_PRODUCT_CODE, CODE_PRODUCT);
+            fragment.setArguments(bundle);
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, fragment, null)
-                .commit();
-
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, fragment, null)
+                    .commit();
+        }
     }
 
 }

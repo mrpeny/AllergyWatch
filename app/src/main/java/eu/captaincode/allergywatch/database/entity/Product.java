@@ -23,6 +23,10 @@ public class Product {
     @Expose
     private String productName;
 
+    @SerializedName("allergens")
+    @Expose
+    private String allergens;
+
     @SerializedName("allergens_tags")
     @Expose
     private List<String> allergensTags;
@@ -62,6 +66,14 @@ public class Product {
 
     public void setLastRefresh(Date lastRefresh) {
         this.lastRefresh = lastRefresh;
+    }
+
+    public String getAllergens() {
+        return allergens;
+    }
+
+    public void setAllergens(String allergens) {
+        this.allergens = allergens;
     }
 
     public List<String> getAllergensTags() {
