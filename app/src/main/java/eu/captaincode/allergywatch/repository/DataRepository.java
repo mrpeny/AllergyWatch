@@ -80,7 +80,7 @@ public class DataRepository {
 
                                         Product refreshedProduct = productSearchResponse.getProduct();
                                         refreshedProduct.setLastRefresh(new Date());
-                                        Log.e(TAG, "Saving product with code: " +
+                                        Log.i(TAG, "Saving product with code: " +
                                                 refreshedProduct.getCode());
                                         mProductDao.save(refreshedProduct);
                                     }
