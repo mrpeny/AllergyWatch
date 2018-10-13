@@ -12,6 +12,7 @@ public class ProductViewModel extends AndroidViewModel {
 
     private final LiveData<Product> mObservableProduct;
     public ObservableField<Product> product = new ObservableField<>();
+    public ObservableField<Boolean> productFound = new ObservableField<>();
 
     public String mCode;
 
@@ -19,6 +20,7 @@ public class ProductViewModel extends AndroidViewModel {
         super(application);
         this.mCode = code;
         this.mObservableProduct = repository.getProduct(mCode);
+        productFound.set(true);
     }
 
     public LiveData<Product> getObservableProduct() {
@@ -27,5 +29,9 @@ public class ProductViewModel extends AndroidViewModel {
 
     public void setProduct(Product product) {
         this.product.set(product);
+    }
+
+    public void setProductFound(Boolean found) {
+        this.productFound.set(found);
     }
 }

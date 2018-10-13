@@ -59,6 +59,9 @@ public class ProductFragment extends Fragment {
             public void onChanged(@Nullable Product product) {
                 if (product != null) {
                     viewModel.setProduct(product);
+                    viewModel.setProductFound(true);
+                } else {
+                    viewModel.setProductFound(false);
                 }
             }
         });

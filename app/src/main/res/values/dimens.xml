@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- MainActivity dimensions. -->
+    <dimen name="fab_margin">16dp</dimen>
+
+    <!-- CameraActivity dimensions. -->
     <dimen name="barcode_aim_margin">60dp</dimen>
     <dimen name="barcode_aim_height">2dp</dimen>
 </resources>

@@ -21,7 +21,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -71,7 +70,6 @@ import java.util.concurrent.TimeUnit;
 
 import eu.captaincode.allergywatch.R;
 import eu.captaincode.allergywatch.barcode.FirebaseBarcodeDetector;
-import eu.captaincode.allergywatch.viewmodel.MainActivityViewModel;
 
 public class CameraFragment extends Fragment implements
         FirebaseBarcodeDetector.BarcodeDetectionListener {
@@ -348,6 +346,8 @@ public class CameraFragment extends Fragment implements
 
     private String mDetectedBarcode = "";
 
+    private BarcodeDetectionListener barcodeDetectionListener;
+
     @Override
     public void onBarcodeDetected(String detectedBarcode) {
         if (mDetectedBarcode.equals(detectedBarcode)) {
@@ -356,8 +356,16 @@ public class CameraFragment extends Fragment implements
         this.mDetectedBarcode = detectedBarcode;
         Toast.makeText(getActivity(), detectedBarcode, Toast.LENGTH_SHORT)
                 .show();
-        ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(MainActivityViewModel.class)
-                .setBarcode(detectedBarcode);
+        this.barcodeDetectionListener.onBarcodeDetected(detectedBarcode);
+        /*ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(MainActivityViewModel.class)
+                .setBarcode(detectedBarcode);*/
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        barcodeDetectionListener = (BarcodeDetectionListener) context;
+
     }
 
     @Override
@@ -825,6 +833,10 @@ public class CameraFragment extends Fragment implements
                     .create();
         }
 
+    }
+
+    interface BarcodeDetectionListener {
+        void onBarcodeDetected(String barcode);
     }
 
 }
