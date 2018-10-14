@@ -39,10 +39,8 @@ public class MainActivity extends AppCompatActivity implements
 
         mTwoPane = getResources().getBoolean(R.bool.isTablet);
 
-
         MainViewModelFactory viewModelFactory = new MainViewModelFactory(getApplication());
         mViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
-
 
         setupRecyclerView();
 
