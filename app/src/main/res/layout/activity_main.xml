@@ -31,10 +31,8 @@
             <include
                 android:id="@+id/incl_product_list"
                 layout="@layout/product_list" />
+
         </FrameLayout>
-
-        <!--<include layout="@layout/content_fab" />-->
-
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"

@@ -14,11 +14,6 @@
         android:showDividers="middle"
         tools:context=".ui.MainActivity">
 
-        <!--
-        This layout is a two-pane layout for the Products
-        master/detail flow.
-        -->
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_product_list"
             android:name="eu.captaincode.popularmovies.ProductListFragment"
@@ -37,4 +32,5 @@
             android:layout_weight="2" />
 
     </LinearLayout>
+
 </layout>

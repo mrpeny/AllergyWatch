@@ -1,18 +1,12 @@
 package eu.captaincode.allergywatch.ui;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import eu.captaincode.allergywatch.R;
-import eu.captaincode.allergywatch.database.entity.Product;
 import eu.captaincode.allergywatch.databinding.ActivityProductBinding;
-import eu.captaincode.allergywatch.viewmodel.ProductViewModel;
-import eu.captaincode.allergywatch.viewmodel.ProductViewModelFactory;
+import eu.captaincode.allergywatch.ui.fragment.ProductFragment;
 
 public class ProductActivity extends AppCompatActivity {
     public static final String KEY_PRODUCT_CODE = "product_code";
@@ -22,11 +16,9 @@ public class ProductActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_product);
+
+        setSupportActionBar(mBinding.toolbar);
 
         Bundle bundle = getIntent().getExtras();
         Long productCode = 0L;
@@ -34,28 +26,20 @@ public class ProductActivity extends AppCompatActivity {
             productCode = bundle.getLong(KEY_PRODUCT_CODE);
         }
 
-        ProductViewModelFactory viewModelFactory = new ProductViewModelFactory(getApplication(),
-                productCode);
-        final ProductViewModel viewModel =
-                ViewModelProviders.of(this, viewModelFactory).get(ProductViewModel.class);
-
-        subscribeUi(viewModel);
+        if (savedInstanceState == null) {
+            showProductFragment(productCode);
+        }
     }
 
-    private void subscribeUi(final ProductViewModel viewModel) {
-        mBinding.setProductViewModel(viewModel);
+    private void showProductFragment(Long barcode) {
+        ProductFragment fragment = new ProductFragment();
+        Bundle bundle = new Bundle();
+        bundle.putLong(ProductFragment.KEY_PRODUCT_CODE, barcode);
+        fragment.setArguments(bundle);
 
-        viewModel.getObservableProduct().observe(this, new Observer<Product>() {
-            @Override
-            public void onChanged(@Nullable Product product) {
-                if (product != null) {
-                    viewModel.setProduct(product);
-                    viewModel.setProductFound(true);
-                } else {
-                    viewModel.setProductFound(false);
-                }
-            }
-        });
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.product_detail_container, fragment, null)
+                .commitAllowingStateLoss();
     }
 
 }
