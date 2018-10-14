@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import eu.captaincode.allergywatch.R;
+import eu.captaincode.allergywatch.ui.fragment.CameraFragment;
 
 public class CameraActivity extends AppCompatActivity implements
         CameraFragment.BarcodeDetectionListener {

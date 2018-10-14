@@ -22,6 +22,7 @@ import eu.captaincode.allergywatch.database.entity.Product;
 public abstract class MyDatabase extends RoomDatabase {
 
     private static final String DATABASE_NAME = "allergy_watch_db.db";
+    // TODO: Remove from release version
     private static final String CODE_PRODUCT = "30176204294844";
     private static final Object LOCK = new Object();
     private static MyDatabase sInstance;

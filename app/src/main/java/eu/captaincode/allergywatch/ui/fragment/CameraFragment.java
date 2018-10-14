@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package eu.captaincode.allergywatch.ui;
+package eu.captaincode.allergywatch.ui.fragment;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -70,6 +70,7 @@ import java.util.concurrent.TimeUnit;
 
 import eu.captaincode.allergywatch.R;
 import eu.captaincode.allergywatch.barcode.FirebaseBarcodeDetector;
+import eu.captaincode.allergywatch.ui.AutoFitTextureView;
 
 public class CameraFragment extends Fragment implements
         FirebaseBarcodeDetector.BarcodeDetectionListener {
@@ -146,7 +147,6 @@ public class CameraFragment extends Fragment implements
     private ImageReader.OnImageAvailableListener mOnImageAvailableListener = new ImageReader.OnImageAvailableListener() {
         @Override
         public void onImageAvailable(ImageReader reader) {
-            Log.i(TAG, "Image available with format: " + reader.getImageFormat());
             Image image = reader.acquireLatestImage();
             barcodeDetector.detectBarcode(image);
             if (image != null) {
@@ -416,12 +416,14 @@ public class CameraFragment extends Fragment implements
      * Stops the background thread and its {@link Handler}.
      */
     private void stopBackgroundThread() {
+        Log.i(TAG, "Stopping background Thread");
         mBackgroundThread.quitSafely();
         try {
             mBackgroundThread.join();
             mBackgroundThread = null;
             mBackgroundHandler = null;
         } catch (InterruptedException e) {
+            Log.w(TAG, "Bacground Thread closing interrupted");
             e.printStackTrace();
         }
     }
@@ -534,12 +536,15 @@ public class CameraFragment extends Fragment implements
 
     private void closeCamera() {
         try {
+            Log.i(TAG, "Closing camera...");
             mCameraOpenCloseLock.acquire();
             closePreviewSession();
             if (null != mCameraDevice) {
                 mCameraDevice.close();
                 mCameraDevice = null;
+                Log.i(TAG, "Camera closed successfully");
             }
+            Log.i(TAG, "CameraDevice was null, skip closing");
         } catch (InterruptedException e) {
             throw new RuntimeException("Interrupted while trying to lock camera closing.");
         } finally {
@@ -594,7 +599,7 @@ public class CameraFragment extends Fragment implements
      */
     private void updatePreview() {
         if (null == mCameraDevice) {
-            Log.e(TAG, "Camera device was null while updateing the preview");
+            Log.e(TAG, "Camera device was null while updating the preview");
             return;
         }
         try {
@@ -609,9 +614,11 @@ public class CameraFragment extends Fragment implements
 
     private void closePreviewSession() {
         if (mPreviewSession != null) {
+            Log.i(TAG, "Closing preview session");
             mPreviewSession.close();
             mPreviewSession = null;
         }
+        Log.i(TAG, "PreviewSession was null, skip closing.");
     }
 
     private void setUpCaptureRequestBuilder() {
