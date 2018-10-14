@@ -23,7 +23,7 @@ public abstract class MyDatabase extends RoomDatabase {
 
     private static final String DATABASE_NAME = "allergy_watch_db.db";
     // TODO: Remove from release version
-    private static final String CODE_PRODUCT = "30176204294844";
+    private static final Long CODE_PRODUCT = 3017620429484L;
     private static final Object LOCK = new Object();
     private static MyDatabase sInstance;
     private MutableLiveData<Boolean> mIsDatabaseCreated = new MutableLiveData<>();
@@ -68,7 +68,12 @@ public abstract class MyDatabase extends RoomDatabase {
                 product.setProductName("Fake Nutella");
                 product.setLastRefresh(new Date());
                 product.setCode(CODE_PRODUCT);
-                database.productDao().save(product);
+
+                Product product2 = new Product();
+                product2.setProductName("Fake Banana");
+                product2.setLastRefresh(new Date());
+                product2.setCode(123456789L);
+                database.productDao().saveBoth(product, product2);
             }
         });
     }

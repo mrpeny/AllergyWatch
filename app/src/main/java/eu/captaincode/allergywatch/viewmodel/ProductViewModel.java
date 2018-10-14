@@ -14,9 +14,9 @@ public class ProductViewModel extends AndroidViewModel {
     public ObservableField<Product> product = new ObservableField<>();
     public ObservableField<Boolean> productFound = new ObservableField<>();
 
-    public String mCode;
+    public Long mCode;
 
-    ProductViewModel(Application application, DataRepository repository, final String code) {
+    ProductViewModel(Application application, DataRepository repository, final Long code) {
         super(application);
         this.mCode = code;
         this.mObservableProduct = repository.getProduct(mCode);

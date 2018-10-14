@@ -12,12 +12,13 @@ import java.util.List;
 @Entity
 public class Product {
 
-    @PrimaryKey()
-    private int productId;
+/*    @PrimaryKey(autoGenerate = true)
+    private int productId;*/
 
+    @PrimaryKey
     @SerializedName("code")
     @Expose
-    private String code;
+    private Long code;
 
     @SerializedName("product_name")
     @Expose
@@ -36,7 +37,7 @@ public class Product {
     public Product() {
     }
 
-    public int getProductId() {
+/*    public int getProductId() {
         return productId;
     }
 
@@ -49,6 +50,16 @@ public class Product {
     }
 
     public void setCode(String code) {
+        this.code = code;
+    }
+
+    */
+
+    public Long getCode() {
+        return code;
+    }
+
+    public void setCode(Long code) {
         this.code = code;
     }
 

@@ -357,8 +357,6 @@ public class CameraFragment extends Fragment implements
         Toast.makeText(getActivity(), detectedBarcode, Toast.LENGTH_SHORT)
                 .show();
         this.barcodeDetectionListener.onBarcodeDetected(detectedBarcode);
-        /*ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(MainActivityViewModel.class)
-                .setBarcode(detectedBarcode);*/
     }
 
     @Override

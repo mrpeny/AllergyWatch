@@ -2,6 +2,9 @@
 <resources>
     <!-- MainActivity dimensions. -->
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="margin_product_card_view">8dp</dimen>
+    <dimen name="padding_product_card_view">8dp</dimen>
 
     <!-- CameraActivity dimensions. -->
     <dimen name="barcode_aim_margin">60dp</dimen>

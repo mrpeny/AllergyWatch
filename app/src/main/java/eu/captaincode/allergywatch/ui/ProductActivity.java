@@ -1,49 +1,45 @@
-package eu.captaincode.allergywatch.ui.fragment;
-
+package eu.captaincode.allergywatch.ui;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import java.util.Objects;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import eu.captaincode.allergywatch.R;
 import eu.captaincode.allergywatch.database.entity.Product;
-import eu.captaincode.allergywatch.databinding.FragmentProductBinding;
+import eu.captaincode.allergywatch.databinding.ActivityProductBinding;
 import eu.captaincode.allergywatch.viewmodel.ProductViewModel;
 import eu.captaincode.allergywatch.viewmodel.ProductViewModelFactory;
 
-public class ProductFragment extends Fragment {
+public class ProductActivity extends AppCompatActivity {
     public static final String KEY_PRODUCT_CODE = "product_code";
 
-    private FragmentProductBinding mBinding;
+    private ActivityProductBinding mBinding;
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_product, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_product);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        Bundle bundle = getArguments();
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_product);
+
+        Bundle bundle = getIntent().getExtras();
         Long productCode = 0L;
         if (bundle != null && bundle.containsKey(KEY_PRODUCT_CODE)) {
             productCode = bundle.getLong(KEY_PRODUCT_CODE);
         }
 
-        ProductViewModelFactory viewModelFactory = new ProductViewModelFactory(
-                Objects.requireNonNull(getActivity()).getApplication(), productCode);
+        ProductViewModelFactory viewModelFactory = new ProductViewModelFactory(getApplication(),
+                productCode);
         final ProductViewModel viewModel =
                 ViewModelProviders.of(this, viewModelFactory).get(ProductViewModel.class);
 
         subscribeUi(viewModel);
-
-        return mBinding.getRoot();
     }
 
     private void subscribeUi(final ProductViewModel viewModel) {
@@ -61,4 +57,5 @@ public class ProductFragment extends Fragment {
             }
         });
     }
+
 }

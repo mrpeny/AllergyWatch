@@ -22,7 +22,21 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <include layout="@layout/content_fab" />
+        <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/rv_product_list"
+            android:name="eu.captaincode.popularmovies.ProductListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            app:layoutManager="LinearLayoutManager"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:listitem="@layout/product_list_item" />
+
+        <!--<include layout="@layout/content_fab" />-->
+
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
