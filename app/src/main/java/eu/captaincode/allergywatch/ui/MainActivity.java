@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
 import java.util.List;
@@ -54,7 +55,8 @@ public class MainActivity extends AppCompatActivity implements
 
     private void setupRecyclerView() {
         final ProductListAdapter productListAdapter = new ProductListAdapter(this, this, mTwoPane);
-        mBinding.rvProductList.setAdapter(productListAdapter);
+        mBinding.inclProductList.rvProductList.setAdapter(productListAdapter);
+        mBinding.inclProductList.rvProductList.setLayoutManager(new LinearLayoutManager(this));
 
         mViewModel.getAllProducts().observe(this, new Observer<List<Product>>() {
             @Override
@@ -74,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements
         if (requestCode == REQUEST_CODE_BARCODE_DETECTION) {
             if (resultCode == RESULT_OK) {
                 String detectedBarcode = data.getStringExtra(CameraActivity.EXTRA_BARCODE);
-                launchProductActivity(detectedBarcode);
+                launchProductActivity(Long.valueOf(detectedBarcode));
             }
         }
     }
@@ -82,28 +84,27 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onProductClicked(Long code) {
         if (mTwoPane) {
-            showProductFragment(String.valueOf(code));
+            showProductFragment(code);
 
         } else {
-            launchProductActivity(String.valueOf(code));
+            launchProductActivity(code);
         }
     }
 
-    private void launchProductActivity(String barcode) {
+    private void launchProductActivity(Long barcode) {
         Intent launchProductActivityIntent = new Intent(this, ProductActivity.class);
-        launchProductActivityIntent.putExtra(ProductActivity.KEY_PRODUCT_CODE,
-                Long.valueOf(barcode));
+        launchProductActivityIntent.putExtra(ProductActivity.KEY_PRODUCT_CODE, barcode);
         startActivity(launchProductActivityIntent);
     }
 
-    private void showProductFragment(String barcode) {
+    private void showProductFragment(Long barcode) {
         ProductFragment fragment = new ProductFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(ProductFragment.KEY_PRODUCT_CODE, barcode);
+        bundle.putLong(ProductFragment.KEY_PRODUCT_CODE, barcode);
         fragment.setArguments(bundle);
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, fragment, null)
+                .replace(R.id.product_detail_container, fragment, null)
                 .commitAllowingStateLoss();
     }
 

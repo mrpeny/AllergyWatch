@@ -9,4 +9,6 @@
     <!-- CameraActivity dimensions. -->
     <dimen name="barcode_aim_margin">60dp</dimen>
     <dimen name="barcode_aim_height">2dp</dimen>
+
+    <dimen name="item_width">200dp</dimen>
 </resources>
