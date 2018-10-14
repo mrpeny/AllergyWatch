@@ -842,7 +842,7 @@ public class CameraFragment extends Fragment implements
 
     }
 
-    interface BarcodeDetectionListener {
+    public interface BarcodeDetectionListener {
         void onBarcodeDetected(String barcode);
     }
 
