@@ -6,5 +6,5 @@ import retrofit2.http.Path;
 
 public interface OffWebService {
     @GET("/api/v0/product/{code}")
-    Call<ProductSearchResponse> getProduct(@Path("code") String code);
+    Call<ProductSearchResponse> getProduct(@Path("code") Long code);
 }

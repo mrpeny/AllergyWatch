@@ -56,7 +56,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     }
 
     public interface ProductClickListener {
-        void onProductClicked(int position);
+        void onProductClicked(Long code);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -73,7 +73,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-            mProductClickListener.onProductClicked(position);
+            mProductClickListener.onProductClicked(mProductList.get(position).getCode());
         }
     }
 }

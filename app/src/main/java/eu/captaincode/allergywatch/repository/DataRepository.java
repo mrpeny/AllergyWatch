@@ -102,7 +102,7 @@ public class DataRepository {
                 boolean productExists = (product != null);
 
                 if (!productExists) {
-                    mOffWebService.getProduct(code.toString()).enqueue(new Callback<ProductSearchResponse>() {
+                    mOffWebService.getProduct(code).enqueue(new Callback<ProductSearchResponse>() {
                         @Override
                         public void onResponse(@NonNull Call<ProductSearchResponse> call,
                                                @NonNull final Response<ProductSearchResponse> response) {

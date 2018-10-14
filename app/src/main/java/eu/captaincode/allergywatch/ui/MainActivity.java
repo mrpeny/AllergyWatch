@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -80,10 +79,20 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    private void launchProductActivity(String detectedBarcode) {
+    @Override
+    public void onProductClicked(Long code) {
+        if (mTwoPane) {
+            showProductFragment(String.valueOf(code));
+
+        } else {
+            launchProductActivity(String.valueOf(code));
+        }
+    }
+
+    private void launchProductActivity(String barcode) {
         Intent launchProductActivityIntent = new Intent(this, ProductActivity.class);
         launchProductActivityIntent.putExtra(ProductActivity.KEY_PRODUCT_CODE,
-                Long.valueOf(detectedBarcode));
+                Long.valueOf(barcode));
         startActivity(launchProductActivityIntent);
     }
 
@@ -98,10 +107,6 @@ public class MainActivity extends AppCompatActivity implements
                 .commitAllowingStateLoss();
     }
 
-    @Override
-    public void onProductClicked(int position) {
-        Toast.makeText(this, "Product list item clicked", Toast.LENGTH_SHORT).show();
-    }
 
 }
 
