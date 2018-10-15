@@ -53,6 +53,10 @@ public class Product {
     @Expose
     private List<String> ingredientsIds;
 
+    @SerializedName("ingredients_text_with_allergens")
+    @Expose
+    private String ingredientsTextWithAllergens;
+
     @SerializedName("quantity")
     @Expose
     private String quantity;
@@ -152,6 +156,14 @@ public class Product {
 
     public void setIngredientsIds(List<String> ingredientsIds) {
         this.ingredientsIds = ingredientsIds;
+    }
+
+    public String getIngredientsTextWithAllergens() {
+        return ingredientsTextWithAllergens;
+    }
+
+    public void setIngredientsTextWithAllergens(String ingredientsTextWithAllergens) {
+        this.ingredientsTextWithAllergens = ingredientsTextWithAllergens;
     }
 
     public String getQuantity() {
