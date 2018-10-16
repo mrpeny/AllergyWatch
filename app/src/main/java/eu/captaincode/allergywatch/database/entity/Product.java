@@ -61,7 +61,7 @@ public class Product {
     @Expose
     private String quantity;
 
-    @SerializedName("https://www.nutella.com/de/de")
+    @SerializedName("link")
     @Expose
     private String link;
 
