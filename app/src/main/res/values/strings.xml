@@ -2,6 +2,7 @@
     <string name="app_name">AllergyWatch</string>
     <string name="record">Record</string>
     <string name="description_info">info</string>
+
     <!-- CAMERA -->
     <string name="permission_request">This sample needs permission for camera and audio recording.</string>
     <string name="camera_error">This device doesn\'t support Camera2 API.</string>
@@ -10,4 +11,11 @@
     <!-- PRODUCT DETAIL -->
     <string name="product_not_found">No product found with code \"%s\"</string>
     <string name="title_activity_product">ProductActivity</string>
+    <string name="product_image_description">Product image</string>
+    <string name="ingredients_title">Ingredients</string>
+    <string name="ingredients_mock">sucre, huile de palme, \<span class="allergen">noisettes\</span> 13 %, cacao maigre 7,4 % vanilline.</string>
+    <string name="allergens_title">Allergens</string>
+    <string name="allergens_mock">Gluten,Leche,Frutos de cáscara,Soja,Frutos de cáscara,Leche,Milch,Schalenfrüchte,Sojabohnen, noisettes</string>
+    <string name="safe_button">Safe</string>
+    <string name="dangerous_button">Dangerous</string>
 </resources>

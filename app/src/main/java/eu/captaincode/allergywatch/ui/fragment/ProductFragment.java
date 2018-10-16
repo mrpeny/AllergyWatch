@@ -24,6 +24,7 @@ public class ProductFragment extends Fragment {
     public static final String KEY_PRODUCT_CODE = "product_code";
 
     private FragmentProductBinding mBinding;
+    private ProductViewModel viewModel;
 
     @Nullable
     @Override
@@ -38,10 +39,10 @@ public class ProductFragment extends Fragment {
 
         ProductViewModelFactory viewModelFactory = new ProductViewModelFactory(
                 Objects.requireNonNull(getActivity()).getApplication(), productCode);
-        final ProductViewModel viewModel =
-                ViewModelProviders.of(this, viewModelFactory).get(ProductViewModel.class);
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ProductViewModel.class);
 
         subscribeUi(viewModel);
+        //loadImage();
 
         return mBinding.getRoot();
     }
@@ -61,4 +62,5 @@ public class ProductFragment extends Fragment {
             }
         });
     }
+
 }

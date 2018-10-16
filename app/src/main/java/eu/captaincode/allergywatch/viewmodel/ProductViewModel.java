@@ -3,8 +3,13 @@ package eu.captaincode.allergywatch.viewmodel;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
+import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
+
+import eu.captaincode.allergywatch.R;
 import eu.captaincode.allergywatch.database.entity.Product;
 import eu.captaincode.allergywatch.repository.DataRepository;
 
@@ -12,14 +17,11 @@ public class ProductViewModel extends AndroidViewModel {
 
     private final LiveData<Product> mObservableProduct;
     public ObservableField<Product> product = new ObservableField<>();
-    public ObservableField<Boolean> productFound = new ObservableField<>();
-
-    public Long mCode;
+    private ObservableField<Boolean> productFound = new ObservableField<>();
 
     ProductViewModel(Application application, DataRepository repository, final Long code) {
         super(application);
-        this.mCode = code;
-        this.mObservableProduct = repository.getProduct(mCode);
+        this.mObservableProduct = repository.getProduct(code);
         productFound.set(true);
     }
 
@@ -33,5 +35,13 @@ public class ProductViewModel extends AndroidViewModel {
 
     public void setProductFound(Boolean found) {
         this.productFound.set(found);
+    }
+
+    @BindingAdapter({"bind:imageUrl"})
+    public static void loadImage(ImageView view, String imageUrl) {
+        Picasso.get()
+                .load(imageUrl)
+                .placeholder(R.drawable.hazelnuts)
+                .into(view);
     }
 }
