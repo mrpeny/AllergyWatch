@@ -14,11 +14,14 @@ import java.util.Date;
 import eu.captaincode.allergywatch.AppExecutors;
 import eu.captaincode.allergywatch.database.converter.AllergenListConverter;
 import eu.captaincode.allergywatch.database.converter.DateConverter;
+import eu.captaincode.allergywatch.database.converter.RatingConverter;
 import eu.captaincode.allergywatch.database.dao.ProductDao;
+import eu.captaincode.allergywatch.database.dao.ProductRatingDao;
 import eu.captaincode.allergywatch.database.entity.Product;
+import eu.captaincode.allergywatch.database.entity.ProductRating;
 
-@Database(entities = {Product.class}, version = 1)
-@TypeConverters({DateConverter.class, AllergenListConverter.class})
+@Database(entities = {Product.class, ProductRating.class}, version = 1)
+@TypeConverters({AllergenListConverter.class, DateConverter.class, RatingConverter.class})
 public abstract class MyDatabase extends RoomDatabase {
 
     private static final String DATABASE_NAME = "allergy_watch_db.db";
@@ -67,7 +70,6 @@ public abstract class MyDatabase extends RoomDatabase {
                 Product product = new Product();
                 product.setProductName("Fake Nutella");
                 product.setLastRefresh(new Date());
-                product.setUserRating(Product.UserRating.DANGEROUS);
                 product.setCode(CODE_PRODUCT);
 
                 Product product2 = new Product();
@@ -80,6 +82,8 @@ public abstract class MyDatabase extends RoomDatabase {
     }
 
     public abstract ProductDao productDao();
+
+    public abstract ProductRatingDao productRatingDao();
 
     private void setDatabaseCreated() {
         mIsDatabaseCreated.postValue(true);

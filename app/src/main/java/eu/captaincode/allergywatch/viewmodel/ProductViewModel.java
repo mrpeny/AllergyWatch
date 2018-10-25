@@ -11,6 +11,7 @@ import com.squareup.picasso.Picasso;
 
 import eu.captaincode.allergywatch.R;
 import eu.captaincode.allergywatch.database.entity.Product;
+import eu.captaincode.allergywatch.database.entity.ProductRating;
 import eu.captaincode.allergywatch.repository.DataRepository;
 
 public class ProductViewModel extends AndroidViewModel {
@@ -51,17 +52,14 @@ public class ProductViewModel extends AndroidViewModel {
     public void onSafeButtonClicked() {
         Product product = this.product.get();
         if (product != null) {
-            product.setUserRating(Product.UserRating.SAFE);
-            repository.update(product);
+            repository.saveProductRating(product.getCode(), ProductRating.Rating.SAFE);
         }
-
     }
 
     public void onDangerousButtonClicked() {
         Product product = this.product.get();
         if (product != null) {
-            product.setUserRating(Product.UserRating.DANGEROUS);
-            repository.update(product);
+            repository.saveProductRating(product.getCode(), ProductRating.Rating.DANGEROUS);
         }
     }
 }

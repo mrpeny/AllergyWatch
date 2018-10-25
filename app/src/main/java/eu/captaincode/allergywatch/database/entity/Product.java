@@ -2,15 +2,12 @@ package eu.captaincode.allergywatch.database.entity;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.TypeConverters;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 import java.util.List;
-
-import eu.captaincode.allergywatch.database.converter.UserRatingConverter;
 
 @Entity
 public class Product {
@@ -71,9 +68,6 @@ public class Product {
     private Date createDate = new Date();
 
     private Date lastRefresh;
-
-    @TypeConverters(UserRatingConverter.class)
-    private UserRating userRating = UserRating.UNDEFINED;
 
     public Product() {
     }
@@ -196,14 +190,6 @@ public class Product {
 
     public void setLink(String link) {
         this.link = link;
-    }
-
-    public UserRating getUserRating() {
-        return userRating;
-    }
-
-    public void setUserRating(UserRating userRating) {
-        this.userRating = userRating;
     }
 
     public enum UserRating {

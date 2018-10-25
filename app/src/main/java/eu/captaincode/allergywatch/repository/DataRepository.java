@@ -17,7 +17,9 @@ import eu.captaincode.allergywatch.api.OffWebService;
 import eu.captaincode.allergywatch.api.ProductSearchResponse;
 import eu.captaincode.allergywatch.database.MyDatabase;
 import eu.captaincode.allergywatch.database.dao.ProductDao;
+import eu.captaincode.allergywatch.database.dao.ProductRatingDao;
 import eu.captaincode.allergywatch.database.entity.Product;
+import eu.captaincode.allergywatch.database.entity.ProductRating;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,6 +36,7 @@ public class DataRepository {
 
     private final OffWebService mOffWebService;
     private final ProductDao mProductDao;
+    private final ProductRatingDao mProductRatingDao;
     private final AppExecutors mExecutors;
 
     private List<Product> mProducts = new ArrayList<>();
@@ -43,6 +46,7 @@ public class DataRepository {
     private DataRepository(MyDatabase database, AppExecutors executors) {
         this.mExecutors = executors;
         this.mProductDao = database.productDao();
+        this.mProductRatingDao = database.productRatingDao();
         Retrofit mRetrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
                 .baseUrl(BASE_URL)
@@ -144,6 +148,19 @@ public class DataRepository {
         });
     }
 
+    public void saveProductRating(Long barcode, ProductRating.Rating rating) {
+        final ProductRating productRating = new ProductRating();
+        productRating.setBarCode(barcode);
+        productRating.setRating(rating);
+        mExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mProductRatingDao.save(productRating);
+            }
+        });
+    }
+
+    /* Helper methods */
     private Date getMaxRefreshTime(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
