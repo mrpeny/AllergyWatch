@@ -84,8 +84,14 @@ public class DataRepository {
         return mProductDao.findAllProducts();
     }
 
-    public void update(Product product) {
-        mProductDao.update(product);
+    public void update(final Product product) {
+        mExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mProductDao.update(product);
+
+            }
+        });
     }
 
     public LiveData<Product> getProduct(Long code) {

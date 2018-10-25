@@ -30,6 +30,7 @@ public class ProductFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_product, container, false);
+        mBinding.setLifecycleOwner(this);
 
         Bundle bundle = getArguments();
         Long productCode = 0L;
@@ -42,7 +43,6 @@ public class ProductFragment extends Fragment {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ProductViewModel.class);
 
         subscribeUi(viewModel);
-        //loadImage();
 
         return mBinding.getRoot();
     }

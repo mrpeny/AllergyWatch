@@ -19,10 +19,13 @@ public class ProductViewModel extends AndroidViewModel {
     public ObservableField<Product> product = new ObservableField<>();
     private ObservableField<Boolean> productFound = new ObservableField<>();
 
+    private DataRepository repository;
+
     ProductViewModel(Application application, DataRepository repository, final Long code) {
         super(application);
         this.mObservableProduct = repository.getProduct(code);
-        productFound.set(true);
+        this.repository = repository;
+        this.productFound.set(true);
     }
 
     public LiveData<Product> getObservableProduct() {
@@ -43,5 +46,22 @@ public class ProductViewModel extends AndroidViewModel {
                 .load(imageUrl)
                 .placeholder(R.drawable.hazelnuts)
                 .into(view);
+    }
+
+    public void onSafeButtonClicked() {
+        Product product = this.product.get();
+        if (product != null) {
+            product.setUserRating(Product.UserRating.SAFE);
+            repository.update(product);
+        }
+
+    }
+
+    public void onDangerousButtonClicked() {
+        Product product = this.product.get();
+        if (product != null) {
+            product.setUserRating(Product.UserRating.DANGEROUS);
+            repository.update(product);
+        }
     }
 }

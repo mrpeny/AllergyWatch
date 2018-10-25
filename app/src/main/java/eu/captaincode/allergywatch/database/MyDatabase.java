@@ -67,6 +67,7 @@ public abstract class MyDatabase extends RoomDatabase {
                 Product product = new Product();
                 product.setProductName("Fake Nutella");
                 product.setLastRefresh(new Date());
+                product.setUserRating(Product.UserRating.DANGEROUS);
                 product.setCode(CODE_PRODUCT);
 
                 Product product2 = new Product();
