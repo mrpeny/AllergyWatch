@@ -81,10 +81,6 @@ public abstract class MyDatabase extends RoomDatabase {
         });
     }
 
-    public abstract ProductDao productDao();
-
-    public abstract ProductRatingDao productRatingDao();
-
     private void setDatabaseCreated() {
         mIsDatabaseCreated.postValue(true);
     }
@@ -94,4 +90,8 @@ public abstract class MyDatabase extends RoomDatabase {
             setDatabaseCreated();
         }
     }
+
+    public abstract ProductDao productDao();
+
+    public abstract ProductRatingDao productRatingDao();
 }

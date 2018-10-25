@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 import eu.captaincode.allergywatch.database.entity.Product;
+import eu.captaincode.allergywatch.database.entity.ProductRating;
 
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 
@@ -42,4 +43,7 @@ public interface ProductDao {
     @Query("SELECT * FROM product")
     List<Product> findAllProducts();
 
+    @Query("SELECT * FROM product WHERE code IN " +
+            "(SELECT barcode FROM ProductRating WHERE rating = :rating)")
+    LiveData<List<Product>> findAllByRating(ProductRating.Rating rating);
 }

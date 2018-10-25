@@ -150,7 +150,7 @@ public class DataRepository {
 
     public void saveProductRating(Long barcode, ProductRating.Rating rating) {
         final ProductRating productRating = new ProductRating();
-        productRating.setBarCode(barcode);
+        productRating.setBarcode(barcode);
         productRating.setRating(rating);
         mExecutors.diskIO().execute(new Runnable() {
             @Override

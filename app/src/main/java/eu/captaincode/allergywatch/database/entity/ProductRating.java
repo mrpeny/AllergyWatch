@@ -10,17 +10,17 @@ import eu.captaincode.allergywatch.database.converter.RatingConverter;
 public class ProductRating {
 
     @PrimaryKey
-    private Long barCode;
+    private Long barcode;
 
     @TypeConverters(RatingConverter.class)
     private Rating rating = Rating.UNDEFINED;
 
-    public Long getBarCode() {
-        return barCode;
+    public Long getBarcode() {
+        return barcode;
     }
 
-    public void setBarCode(Long barCode) {
-        this.barCode = barCode;
+    public void setBarcode(Long barcode) {
+        this.barcode = barcode;
     }
 
     public Rating getRating() {
