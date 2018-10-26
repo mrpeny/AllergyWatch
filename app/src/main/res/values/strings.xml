@@ -1,7 +1,19 @@
 <resources>
     <string name="app_name">AllergyWatch</string>
-    <string name="record">Record</string>
-    <string name="description_info">info</string>
+
+    <!-- NAVIGATION DRAWER -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <string name="scan_food">Scan food</string>
+    <string name="safe_foods">Safe foods</string>
+    <string name="dangerous_foods">Dangerous foods</string>
+    <string name="history">History</string>
+    <string name="build_up_your_safe_food_set">Build up your safe food set!</string>
+
 
     <!-- CAMERA -->
     <string name="permission_request">This sample needs permission for camera and audio recording.</string>
@@ -18,4 +30,5 @@
     <string name="allergens_mock">Gluten,Leche,Frutos de cáscara,Soja,Frutos de cáscara,Leche,Milch,Schalenfrüchte,Sojabohnen, noisettes</string>
     <string name="safe_button">Safe</string>
     <string name="dangerous_button">Dangerous</string>
+
 </resources>

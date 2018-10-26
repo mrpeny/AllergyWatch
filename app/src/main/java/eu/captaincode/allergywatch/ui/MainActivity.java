@@ -6,9 +6,14 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.MenuItem;
 import android.view.View;
 
 import java.util.List;
@@ -22,7 +27,7 @@ import eu.captaincode.allergywatch.viewmodel.MainViewModel;
 import eu.captaincode.allergywatch.viewmodel.MainViewModelFactory;
 
 public class MainActivity extends AppCompatActivity implements
-        ProductListAdapter.ProductClickListener {
+        ProductListAdapter.ProductClickListener, NavigationView.OnNavigationItemSelectedListener {
 
     public static final int REQUEST_CODE_BARCODE_DETECTION = 100;
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -36,6 +41,14 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         setSupportActionBar(mBinding.toolbar);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mBinding.drawerLayout, mBinding.toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mBinding.drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        mBinding.navView.setNavigationItemSelectedListener(this);
 
         mTwoPane = getResources().getBoolean(R.bool.isTablet);
 
@@ -51,6 +64,33 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.nav_camera) {
+
+        } else if (id == R.id.nav_gallery) {
+
+        } else if (id == R.id.nav_slideshow) {
+
+        } else if (id == R.id.nav_manage) {
+
+        }
+
+        mBinding.drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mBinding.drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private void setupRecyclerView() {
@@ -85,7 +125,6 @@ public class MainActivity extends AppCompatActivity implements
     public void onProductClicked(Long code) {
         if (mTwoPane) {
             showProductFragment(code);
-
         } else {
             launchProductActivity(code);
         }
@@ -107,7 +146,6 @@ public class MainActivity extends AppCompatActivity implements
                 .replace(R.id.product_detail_container, fragment, null)
                 .commitAllowingStateLoss();
     }
-
 
 }
 
