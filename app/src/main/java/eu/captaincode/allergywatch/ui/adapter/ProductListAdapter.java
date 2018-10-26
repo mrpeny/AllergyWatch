@@ -22,12 +22,10 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     private Context mContext;
     private List<Product> mProductList = new ArrayList<>();
     private ProductClickListener mProductClickListener;
-    private boolean mTwoPane;
 
-    public ProductListAdapter(Context mContext, ProductClickListener listener, boolean twoPane) {
-        this.mContext = mContext;
+    public ProductListAdapter(Context context, ProductClickListener listener) {
+        this.mContext = context;
         this.mProductClickListener = listener;
-        this.mTwoPane = twoPane;
     }
 
     @NonNull

@@ -14,9 +14,8 @@
         android:showDividers="middle"
         tools:context=".ui.MainActivity">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_product_list"
-            android:name="eu.captaincode.popularmovies.ProductListFragment"
+        <FrameLayout
+            android:id="@+id/frameLayout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="16dp"

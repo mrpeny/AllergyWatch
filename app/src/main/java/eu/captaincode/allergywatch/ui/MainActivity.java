@@ -1,27 +1,22 @@
 package eu.captaincode.allergywatch.ui;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.MenuItem;
 import android.view.View;
 
-import java.util.List;
-
 import eu.captaincode.allergywatch.R;
-import eu.captaincode.allergywatch.database.entity.Product;
 import eu.captaincode.allergywatch.databinding.ActivityMainBinding;
 import eu.captaincode.allergywatch.ui.adapter.ProductListAdapter;
+import eu.captaincode.allergywatch.ui.fragment.MasterFragment;
 import eu.captaincode.allergywatch.ui.fragment.ProductFragment;
 import eu.captaincode.allergywatch.viewmodel.MainViewModel;
 import eu.captaincode.allergywatch.viewmodel.MainViewModelFactory;
@@ -42,22 +37,14 @@ public class MainActivity extends AppCompatActivity implements
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         setSupportActionBar(mBinding.toolbar);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mBinding.drawerLayout, mBinding.toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mBinding.drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-
-        mBinding.navView.getMenu().findItem(R.id.nav_history).setChecked(true);
-
-        mBinding.navView.setNavigationItemSelectedListener(this);
+        setupNavigationDrawer();
 
         mTwoPane = getResources().getBoolean(R.bool.isTablet);
 
         MainViewModelFactory viewModelFactory = new MainViewModelFactory(getApplication());
         mViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
 
-        setupRecyclerView();
+        showMasterFragment();
 
         mBinding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +52,39 @@ public class MainActivity extends AppCompatActivity implements
                 startCameraActivityForResult();
             }
         });
+    }
 
+    private void setupNavigationDrawer() {
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mBinding.drawerLayout, mBinding.toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mBinding.drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        mBinding.navView.getMenu().findItem(R.id.nav_history).setChecked(true);
+        mBinding.navView.setNavigationItemSelectedListener(this);
+    }
+
+    private void showMasterFragment() {
+        MasterFragment fragment = MasterFragment.newInstance(MasterFragment.LIST_TYPE_HISTORY);
+        getSupportFragmentManager().beginTransaction()
+                .replace(mBinding.inclProductList.frameLayout.getId(), fragment, null)
+                .commit();
+    }
+
+    private void startCameraActivityForResult() {
+        Intent barcodeDetectionIntent = new Intent(this, CameraActivity.class);
+        startActivityForResult(barcodeDetectionIntent, REQUEST_CODE_BARCODE_DETECTION);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_BARCODE_DETECTION) {
+            if (resultCode == RESULT_OK) {
+                String detectedBarcode = data.getStringExtra(CameraActivity.EXTRA_BARCODE);
+                launchProductActivity(Long.valueOf(detectedBarcode));
+            }
+        }
     }
 
     @Override
@@ -92,34 +111,6 @@ public class MainActivity extends AppCompatActivity implements
             mBinding.drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
-        }
-    }
-
-    private void setupRecyclerView() {
-        final ProductListAdapter productListAdapter = new ProductListAdapter(this, this, mTwoPane);
-        mBinding.inclProductList.rvProductList.setAdapter(productListAdapter);
-        mBinding.inclProductList.rvProductList.setLayoutManager(new LinearLayoutManager(this));
-
-        mViewModel.getAllProducts().observe(this, new Observer<List<Product>>() {
-            @Override
-            public void onChanged(@Nullable List<Product> products) {
-                productListAdapter.swapData(products);
-            }
-        });
-    }
-
-    private void startCameraActivityForResult() {
-        Intent barcodeDetectionIntent = new Intent(this, CameraActivity.class);
-        startActivityForResult(barcodeDetectionIntent, REQUEST_CODE_BARCODE_DETECTION);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE_BARCODE_DETECTION) {
-            if (resultCode == RESULT_OK) {
-                String detectedBarcode = data.getStringExtra(CameraActivity.EXTRA_BARCODE);
-                launchProductActivity(Long.valueOf(detectedBarcode));
-            }
         }
     }
 

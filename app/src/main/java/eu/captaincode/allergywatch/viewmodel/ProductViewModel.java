@@ -41,7 +41,7 @@ public class ProductViewModel extends AndroidViewModel {
         this.productFound.set(found);
     }
 
-    @BindingAdapter({"bind:imageUrl"})
+    @BindingAdapter({"imageUrl"})
     public static void loadImage(ImageView view, String imageUrl) {
         Picasso.get()
                 .load(imageUrl)
