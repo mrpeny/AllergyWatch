@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements
         mBinding.drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        mBinding.navView.getMenu().findItem(R.id.nav_history).setChecked(true);
+
         mBinding.navView.setNavigationItemSelectedListener(this);
 
         mTwoPane = getResources().getBoolean(R.bool.isTablet);
@@ -71,12 +73,12 @@ public class MainActivity extends AppCompatActivity implements
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
+            startCameraActivityForResult();
+        } else if (id == R.id.nav_safe_foods) {
 
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_dangerous_foods) {
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_history) {
 
         }
 
