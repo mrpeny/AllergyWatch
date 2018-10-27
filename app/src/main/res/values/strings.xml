@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">AllergyWatch</string>
 
+    <!-- MAIN ACTIVITY -->
+    <string name="no_products_added_to_this_category">No products added to this category</string>
+
     <!-- NAVIGATION DRAWER -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

@@ -3,6 +3,7 @@ package eu.captaincode.allergywatch.viewmodel;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 
 import java.util.List;
 
@@ -13,11 +14,11 @@ import eu.captaincode.allergywatch.repository.DataRepository;
 public class MainViewModel extends AndroidViewModel {
 
     private DataRepository mRepository;
+    public MutableLiveData<Boolean> isListEmpty = new MutableLiveData<>();
 
     MainViewModel(Application application) {
         super(application);
         this.mRepository = ((AllergyWatchApp) application).getRepository();
-
     }
 
     public LiveData<List<Product>> getAllProducts() {

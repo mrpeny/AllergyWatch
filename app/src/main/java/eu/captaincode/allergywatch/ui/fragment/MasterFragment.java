@@ -27,15 +27,11 @@ public class MasterFragment extends Fragment {
     public static final int LIST_TYPE_SAFE = 1;
     public static final int LIST_TYPE_DANGEROUS = 2;
     private static final String KEY_LIST_TYPE = "list-type";
+
     private FragmentMasterBinding mBinding;
     private MainViewModel mViewModel;
 
     private int selectedListType;
-
-    public MasterFragment() {
-        // Required empty public constructor
-    }
-
 
     public static MasterFragment newInstance(int listType) {
         MasterFragment fragment = new MasterFragment();
@@ -87,6 +83,7 @@ public class MasterFragment extends Fragment {
         MainViewModelFactory viewModelFactory =
                 new MainViewModelFactory(Objects.requireNonNull(getActivity()).getApplication());
         mViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
+        mBinding.setMainViewModel(mViewModel);
     }
 
     private void setupRecyclerView() {
@@ -109,7 +106,14 @@ public class MasterFragment extends Fragment {
         }
 
         if (productList != null) {
-            productList.observe(this, productListAdapter::swapData);
+            productList.observe(this, newProducts -> {
+                if (newProducts == null || newProducts.isEmpty()) {
+                    mViewModel.isListEmpty.setValue(true);
+                } else {
+                    mViewModel.isListEmpty.setValue(false);
+                }
+                productListAdapter.swapData(newProducts);
+            });
         }
     }
 
