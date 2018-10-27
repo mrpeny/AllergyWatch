@@ -4,6 +4,8 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import java.util.Objects;
+
 import eu.captaincode.allergywatch.R;
 import eu.captaincode.allergywatch.databinding.ActivityProductBinding;
 import eu.captaincode.allergywatch.ui.fragment.ProductFragment;
@@ -19,6 +21,7 @@ public class ProductActivity extends AppCompatActivity {
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_product);
 
         setSupportActionBar(mBinding.toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         Bundle bundle = getIntent().getExtras();
         Long productCode = 0L;
