@@ -24,6 +24,14 @@ public class MainViewModel extends AndroidViewModel {
         return mRepository.getProducts();
     }
 
+    public LiveData<List<Product>> getSafeProducts() {
+        return mRepository.getSafeProducts();
+    }
+
+    public LiveData<List<Product>> getDangerousProducts() {
+        return mRepository.getDangerousProducts();
+    }
+
     public void refreshProducts() {
         mRepository.refreshProducts();
     }

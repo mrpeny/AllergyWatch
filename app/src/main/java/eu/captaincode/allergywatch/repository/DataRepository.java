@@ -66,20 +66,26 @@ public class DataRepository {
         return sInstance;
     }
 
-
     public LiveData<List<Product>> getProducts() {
         refreshProducts();
         return mProductDao.findAll();
     }
 
+    public LiveData<List<Product>> getSafeProducts() {
+        refreshProducts();
+        return mProductDao.findAllByRating(ProductRating.Rating.SAFE);
+    }
+
+    public LiveData<List<Product>> getDangerousProducts() {
+        refreshProducts();
+        return mProductDao.findAllByRating(ProductRating.Rating.DANGEROUS);
+    }
+
     public void refreshProducts() {
-        mExecutors.diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                List<Product> products = mProductDao.findAllProducts();
-                for (Product product : products) {
-                    refreshProduct(product.getCode());
-                }
+        mExecutors.diskIO().execute(() -> {
+            List<Product> products = mProductDao.findAllProducts();
+            for (Product product : products) {
+                refreshProduct(product.getCode());
             }
         });
     }
@@ -89,13 +95,7 @@ public class DataRepository {
     }
 
     public void update(final Product product) {
-        mExecutors.diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                mProductDao.update(product);
-
-            }
-        });
+        mExecutors.diskIO().execute(() -> mProductDao.update(product));
     }
 
     public LiveData<Product> getProduct(Long code) {
@@ -104,46 +104,40 @@ public class DataRepository {
     }
 
     private void refreshProduct(final Long code) {
-        mExecutors.diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                final Product product = mProductDao.hasProduct(
-                        code, DataRepository.this.getMaxRefreshTime(new Date()));
-                boolean productExists = (product != null);
+        mExecutors.diskIO().execute(() -> {
+            final Product product = mProductDao.hasProduct(
+                    code, DataRepository.this.getMaxRefreshTime(new Date()));
+            boolean productExists = (product != null);
 
-                if (!productExists) {
-                    mOffWebService.getProduct(code).enqueue(new Callback<ProductSearchResponse>() {
-                        @Override
-                        public void onResponse(@NonNull Call<ProductSearchResponse> call,
-                                               @NonNull final Response<ProductSearchResponse> response) {
-                            Log.i(TAG, "Data refreshed from the network");
-                            mExecutors.networkIO().execute(new Runnable() {
-                                @Override
-                                public void run() {
-                                    ProductSearchResponse productSearchResponse = response.body();
-                                    if (productSearchResponse != null &&
-                                            productSearchResponse.getStatus() == CODE_PRODUCT_FOUND) {
+            if (!productExists) {
+                mOffWebService.getProduct(code).enqueue(new Callback<ProductSearchResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<ProductSearchResponse> call,
+                                           @NonNull final Response<ProductSearchResponse> response) {
+                        Log.i(TAG, "Data refreshed from the network");
+                        mExecutors.networkIO().execute(() -> {
+                            ProductSearchResponse productSearchResponse = response.body();
+                            if (productSearchResponse != null &&
+                                    productSearchResponse.getStatus() == CODE_PRODUCT_FOUND) {
 
-                                        Product refreshedProduct = productSearchResponse.getProduct();
-                                        refreshedProduct.setLastRefresh(new Date());
-                                        Log.i(TAG, "Saving product with code: " +
-                                                refreshedProduct.getCode());
-                                        mProductDao.save(refreshedProduct);
-                                    } else {
-                                        Log.d(TAG, "Search result was null or returned with error");
-                                    }
-                                }
-                            });
-                        }
+                                Product refreshedProduct = productSearchResponse.getProduct();
+                                refreshedProduct.setLastRefresh(new Date());
+                                Log.i(TAG, "Saving product with code: " +
+                                        refreshedProduct.getCode());
+                                mProductDao.save(refreshedProduct);
+                            } else {
+                                Log.d(TAG, "Search result was null or returned with error");
+                            }
+                        });
+                    }
 
-                        @Override
-                        public void onFailure(@NonNull Call<ProductSearchResponse> call,
-                                              @NonNull Throwable t) {
-                            Log.e(TAG, "Failed to connect to OFF Web API:" + t.getMessage());
-                            t.printStackTrace();
-                        }
-                    });
-                }
+                    @Override
+                    public void onFailure(@NonNull Call<ProductSearchResponse> call,
+                                          @NonNull Throwable t) {
+                        Log.e(TAG, "Failed to connect to OFF Web API:" + t.getMessage());
+                        t.printStackTrace();
+                    }
+                });
             }
         });
     }
@@ -152,12 +146,7 @@ public class DataRepository {
         final ProductRating productRating = new ProductRating();
         productRating.setBarcode(barcode);
         productRating.setRating(rating);
-        mExecutors.diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                mProductRatingDao.save(productRating);
-            }
-        });
+        mExecutors.diskIO().execute(() -> mProductRatingDao.save(productRating));
     }
 
     /* Helper methods */

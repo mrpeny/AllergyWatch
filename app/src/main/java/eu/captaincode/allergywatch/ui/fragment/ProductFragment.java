@@ -1,7 +1,6 @@
 package eu.captaincode.allergywatch.ui.fragment;
 
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -15,13 +14,13 @@ import android.view.ViewGroup;
 import java.util.Objects;
 
 import eu.captaincode.allergywatch.R;
-import eu.captaincode.allergywatch.database.entity.Product;
 import eu.captaincode.allergywatch.databinding.FragmentProductBinding;
 import eu.captaincode.allergywatch.viewmodel.ProductViewModel;
 import eu.captaincode.allergywatch.viewmodel.ProductViewModelFactory;
 
 public class ProductFragment extends Fragment {
     public static final String KEY_PRODUCT_CODE = "product_code";
+    public static final String TAG_PRODUCT_FRAGMENT = "product-fragment";
 
     private FragmentProductBinding mBinding;
     private ProductViewModel viewModel;
@@ -50,15 +49,12 @@ public class ProductFragment extends Fragment {
     private void subscribeUi(final ProductViewModel viewModel) {
         mBinding.setProductViewModel(viewModel);
 
-        viewModel.getObservableProduct().observe(this, new Observer<Product>() {
-            @Override
-            public void onChanged(@Nullable Product product) {
-                if (product != null) {
-                    viewModel.setProduct(product);
-                    viewModel.setProductFound(true);
-                } else {
-                    viewModel.setProductFound(false);
-                }
+        viewModel.getObservableProduct().observe(this, product -> {
+            if (product != null) {
+                viewModel.setProduct(product);
+                viewModel.setProductFound(true);
+            } else {
+                viewModel.setProductFound(false);
             }
         });
     }

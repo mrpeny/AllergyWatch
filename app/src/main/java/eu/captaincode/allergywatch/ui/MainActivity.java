@@ -7,11 +7,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.view.View;
 
 import eu.captaincode.allergywatch.R;
 import eu.captaincode.allergywatch.databinding.ActivityMainBinding;
@@ -44,14 +44,9 @@ public class MainActivity extends AppCompatActivity implements
         MainViewModelFactory viewModelFactory = new MainViewModelFactory(getApplication());
         mViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
 
-        showMasterFragment();
+        showMasterFragment(MasterFragment.LIST_TYPE_HISTORY);
 
-        mBinding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startCameraActivityForResult();
-            }
-        });
+        mBinding.fab.setOnClickListener(v -> startCameraActivityForResult());
     }
 
     private void setupNavigationDrawer() {
@@ -63,10 +58,12 @@ public class MainActivity extends AppCompatActivity implements
 
         mBinding.navView.getMenu().findItem(R.id.nav_history).setChecked(true);
         mBinding.navView.setNavigationItemSelectedListener(this);
+        // TODO: Implement Always open NavDrawer
+        // https://stackoverflow.com/questions/17133541/navigation-drawer-set-as-always-opened-on-tablets/50646711#50646711
     }
 
-    private void showMasterFragment() {
-        MasterFragment fragment = MasterFragment.newInstance(MasterFragment.LIST_TYPE_HISTORY);
+    private void showMasterFragment(int listType) {
+        MasterFragment fragment = MasterFragment.newInstance(listType);
         getSupportFragmentManager().beginTransaction()
                 .replace(mBinding.inclProductList.frameLayout.getId(), fragment, null)
                 .commit();
@@ -94,15 +91,32 @@ public class MainActivity extends AppCompatActivity implements
         if (id == R.id.nav_camera) {
             startCameraActivityForResult();
         } else if (id == R.id.nav_safe_foods) {
-
+            showMasterFragment(MasterFragment.LIST_TYPE_SAFE);
+            removeProductFragment();
         } else if (id == R.id.nav_dangerous_foods) {
-
+            showMasterFragment(MasterFragment.LIST_TYPE_DANGEROUS);
+            removeProductFragment();
         } else if (id == R.id.nav_history) {
-
+            showMasterFragment(MasterFragment.LIST_TYPE_HISTORY);
+            removeProductFragment();
         }
 
         mBinding.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void removeProductFragment() {
+        if (mTwoPane) {
+            Fragment productFragment = getSupportFragmentManager()
+                    .findFragmentByTag(ProductFragment.TAG_PRODUCT_FRAGMENT);
+
+            if (productFragment != null) {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .remove(productFragment)
+                        .commit();
+            }
+        }
     }
 
     @Override
@@ -136,7 +150,9 @@ public class MainActivity extends AppCompatActivity implements
         fragment.setArguments(bundle);
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.product_detail_container, fragment, null)
+                .replace(R.id.product_detail_container,
+                        fragment,
+                        ProductFragment.TAG_PRODUCT_FRAGMENT)
                 .commitAllowingStateLoss();
     }
 
