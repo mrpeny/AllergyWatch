@@ -20,7 +20,7 @@ import eu.captaincode.allergywatch.database.dao.ProductRatingDao;
 import eu.captaincode.allergywatch.database.entity.Product;
 import eu.captaincode.allergywatch.database.entity.ProductRating;
 
-@Database(entities = {Product.class, ProductRating.class}, version = 1)
+@Database(entities = {Product.class, ProductRating.class}, version = 1, exportSchema = false)
 @TypeConverters({AllergenListConverter.class, DateConverter.class, RatingConverter.class})
 public abstract class MyDatabase extends RoomDatabase {
 
@@ -48,15 +48,12 @@ public abstract class MyDatabase extends RoomDatabase {
                 .addCallback(new Callback() {
                     @Override
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {
-                        executors.diskIO().execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    Thread.sleep(4000);
-                                } catch (InterruptedException ignored) {
-                                }
-                                insertInitialData(context, executors);
+                        executors.diskIO().execute(() -> {
+                            try {
+                                Thread.sleep(4000);
+                            } catch (InterruptedException ignored) {
                             }
+                            insertInitialData(context, executors);
                         });
                     }
                 }).build();
@@ -64,20 +61,17 @@ public abstract class MyDatabase extends RoomDatabase {
 
     private static void insertInitialData(Context context, AppExecutors executors) {
         final MyDatabase database = MyDatabase.getInstance(context.getApplicationContext(), executors);
-        database.runInTransaction(new Runnable() {
-            @Override
-            public void run() {
-                Product product = new Product();
-                product.setProductName("Fake Nutella");
-                product.setLastRefresh(new Date());
-                product.setCode(CODE_PRODUCT);
+        database.runInTransaction(() -> {
+            Product product = new Product();
+            product.setProductName("Fake Nutella");
+            product.setLastRefresh(new Date());
+            product.setCode(CODE_PRODUCT);
 
-                Product product2 = new Product();
-                product2.setProductName("Fake Banana");
-                product2.setLastRefresh(new Date());
-                product2.setCode(123456789L);
-                database.productDao().saveBoth(product, product2);
-            }
+            Product product2 = new Product();
+            product2.setProductName("Fake Banana");
+            product2.setLastRefresh(new Date());
+            product2.setCode(123456789L);
+            database.productDao().saveBoth(product, product2);
         });
     }
 

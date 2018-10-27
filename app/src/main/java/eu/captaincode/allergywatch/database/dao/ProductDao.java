@@ -35,15 +35,15 @@ public interface ProductDao {
     Product hasProduct(Long code, Date lastRefreshMax);
 
     @Query("SELECT * FROM product WHERE code = :code LIMIT 1")
-    Product loadByCode(String code);
+    Product loadByCode(Long code);
 
-    @Query("SELECT * FROM product")
+    @Query("SELECT * FROM product ORDER BY createDate DESC")
     LiveData<List<Product>> findAll();
 
-    @Query("SELECT * FROM product")
+    @Query("SELECT * FROM product ORDER BY createDate DESC")
     List<Product> findAllProducts();
 
     @Query("SELECT * FROM product WHERE code IN " +
-            "(SELECT barcode FROM ProductRating WHERE rating = :rating)")
+            "(SELECT barcode FROM ProductRating WHERE rating = :rating) ORDER BY createDate DESC")
     LiveData<List<Product>> findAllByRating(ProductRating.Rating rating);
 }

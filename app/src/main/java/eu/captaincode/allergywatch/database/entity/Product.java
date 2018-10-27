@@ -192,19 +192,4 @@ public class Product {
         this.link = link;
     }
 
-    public enum UserRating {
-        UNDEFINED(0),
-        SAFE(1),
-        DANGEROUS(2);
-
-        private int code;
-
-        UserRating(int code) {
-            this.code = code;
-        }
-
-        public int getCode() {
-            return code;
-        }
-    }
 }

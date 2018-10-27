@@ -105,9 +105,11 @@ public class DataRepository {
 
     private void refreshProduct(final Long code) {
         mExecutors.diskIO().execute(() -> {
-            final Product product = mProductDao.hasProduct(
+            final Product oldProduct = mProductDao.loadByCode(code);
+
+            final Product outdatedProduct = mProductDao.hasProduct(
                     code, DataRepository.this.getMaxRefreshTime(new Date()));
-            boolean productExists = (product != null);
+            boolean productExists = (outdatedProduct != null);
 
             if (!productExists) {
                 mOffWebService.getProduct(code).enqueue(new Callback<ProductSearchResponse>() {
@@ -122,6 +124,9 @@ public class DataRepository {
 
                                 Product refreshedProduct = productSearchResponse.getProduct();
                                 refreshedProduct.setLastRefresh(new Date());
+                                if (oldProduct != null) {
+                                    refreshedProduct.setCreateDate(oldProduct.getCreateDate());
+                                }
                                 Log.i(TAG, "Saving product with code: " +
                                         refreshedProduct.getCode());
                                 mProductDao.save(refreshedProduct);
