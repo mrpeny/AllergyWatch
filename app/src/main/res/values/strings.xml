@@ -21,6 +21,7 @@
     <string name="camera_error_general">Problem occurred while opening the camera. Pleaset try again!</string>
 
     <!-- PRODUCT DETAIL -->
+    <string name="product_details_title">Product Details</string>
     <string name="product_not_found">No product found with code \"%s\"</string>
     <string name="title_activity_product">ProductActivity</string>
     <string name="product_image_description">Product image</string>

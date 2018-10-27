@@ -1,5 +1,6 @@
 package eu.captaincode.allergywatch.ui.fragment;
 
+import android.app.Activity;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
@@ -22,11 +23,10 @@ import eu.captaincode.allergywatch.viewmodel.MainViewModel;
 import eu.captaincode.allergywatch.viewmodel.MainViewModelFactory;
 
 public class MasterFragment extends Fragment {
-    private static final String KEY_LIST_TYPE = "list-type";
     public static final int LIST_TYPE_HISTORY = 0;
     public static final int LIST_TYPE_SAFE = 1;
     public static final int LIST_TYPE_DANGEROUS = 2;
-
+    private static final String KEY_LIST_TYPE = "list-type";
     private FragmentMasterBinding mBinding;
     private MainViewModel mViewModel;
 
@@ -59,10 +59,28 @@ public class MasterFragment extends Fragment {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_master, container, false);
         mBinding.setLifecycleOwner(this);
 
+        setTitle();
         setupViewModel();
         setupRecyclerView();
 
         return mBinding.getRoot();
+    }
+
+    private void setTitle() {
+        Activity parentActivity = getActivity();
+        if (parentActivity != null) {
+            switch (selectedListType) {
+                case LIST_TYPE_HISTORY:
+                    parentActivity.setTitle(R.string.history);
+                    break;
+                case LIST_TYPE_SAFE:
+                    parentActivity.setTitle(R.string.safe_foods);
+                    break;
+                case LIST_TYPE_DANGEROUS:
+                    parentActivity.setTitle(R.string.dangerous_foods);
+                    break;
+            }
+        }
     }
 
     private void setupViewModel() {

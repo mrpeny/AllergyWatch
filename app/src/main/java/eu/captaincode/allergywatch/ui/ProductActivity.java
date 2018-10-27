@@ -22,6 +22,7 @@ public class ProductActivity extends AppCompatActivity {
 
         setSupportActionBar(mBinding.toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        setTitle(R.string.product_details_title);
 
         Bundle bundle = getIntent().getExtras();
         Long productCode = 0L;
