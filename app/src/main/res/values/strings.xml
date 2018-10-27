@@ -23,6 +23,8 @@
     <!-- PRODUCT DETAIL -->
     <string name="product_details_title">Product Details</string>
     <string name="product_not_found">No product found with code \"%s\"</string>
+    <string name="no_allergens_found">No allergens found</string>
+    <string name="no_ingredients_found">No ingredients found</string>
     <string name="title_activity_product">ProductActivity</string>
     <string name="product_image_description">Product image</string>
     <string name="ingredients_title">Ingredients</string>

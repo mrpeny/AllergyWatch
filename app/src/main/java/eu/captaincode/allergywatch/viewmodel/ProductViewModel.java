@@ -3,8 +3,11 @@ package eu.captaincode.allergywatch.viewmodel;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Transformations;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
+import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
@@ -17,28 +20,18 @@ import eu.captaincode.allergywatch.repository.DataRepository;
 public class ProductViewModel extends AndroidViewModel {
 
     private final LiveData<Product> mObservableProduct;
-    public ObservableField<Product> product = new ObservableField<>();
-    private ObservableField<Boolean> productFound = new ObservableField<>();
+    public MutableLiveData<Product> product = new MutableLiveData<>();
+    public ObservableField<Boolean> productFound = new ObservableField<>();
 
     private DataRepository repository;
+    private long code;
 
     ProductViewModel(Application application, DataRepository repository, final Long code) {
         super(application);
+        this.code = code;
         this.mObservableProduct = repository.getProduct(code);
         this.repository = repository;
         this.productFound.set(true);
-    }
-
-    public LiveData<Product> getObservableProduct() {
-        return this.mObservableProduct;
-    }
-
-    public void setProduct(Product product) {
-        this.product.set(product);
-    }
-
-    public void setProductFound(Boolean found) {
-        this.productFound.set(found);
     }
 
     @BindingAdapter({"imageUrl"})
@@ -50,16 +43,57 @@ public class ProductViewModel extends AndroidViewModel {
     }
 
     public void onSafeButtonClicked() {
-        Product product = this.product.get();
+        Product product = this.product.getValue();
         if (product != null) {
             repository.saveProductRating(product.getCode(), ProductRating.Rating.SAFE);
         }
     }
 
     public void onDangerousButtonClicked() {
-        Product product = this.product.get();
+        Product product = this.product.getValue();
         if (product != null) {
             repository.saveProductRating(product.getCode(), ProductRating.Rating.DANGEROUS);
         }
     }
+
+    public LiveData<String> getAllergens() {
+        return Transformations.map(product, productValue -> {
+            if (TextUtils.isEmpty(productValue.getAllergensFromIngredients())) {
+                return getApplication().getResources().getString(R.string.no_allergens_found);
+            } else {
+                return productValue.getAllergensFromIngredients();
+            }
+        });
+    }
+
+    public LiveData<String> getIngredients() {
+        return Transformations.map(product, productValue -> {
+            if (TextUtils.isEmpty(productValue.getIngredientsText())) {
+                return getApplication().getResources().getString(R.string.no_ingredients_found);
+            } else {
+                return productValue.getIngredientsText();
+            }
+        });
+    }
+
+    public LiveData<Product> getObservableProduct() {
+        return this.mObservableProduct;
+    }
+
+    public void setProduct(Product product) {
+        this.product.setValue(product);
+    }
+
+    public void setProductFound(Boolean found) {
+        this.productFound.set(found);
+    }
+
+    public long getCode() {
+        return code;
+    }
+
+    public void setCode(long code) {
+        this.code = code;
+    }
+
 }
