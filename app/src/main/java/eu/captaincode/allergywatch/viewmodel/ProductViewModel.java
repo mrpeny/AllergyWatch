@@ -5,6 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
+import android.content.Intent;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
 import android.text.TextUtils;
@@ -16,6 +17,7 @@ import eu.captaincode.allergywatch.R;
 import eu.captaincode.allergywatch.database.entity.Product;
 import eu.captaincode.allergywatch.database.entity.ProductRating;
 import eu.captaincode.allergywatch.repository.DataRepository;
+import eu.captaincode.allergywatch.service.WidgetUpdateService;
 
 public class ProductViewModel extends AndroidViewModel {
 
@@ -47,6 +49,8 @@ public class ProductViewModel extends AndroidViewModel {
         if (product != null) {
             repository.saveProductRating(product.getCode(), ProductRating.Rating.SAFE);
         }
+        sendUpdateWidgetBroadcast();
+        // TODO: Show Snackbar confirming operation with UNDO action and disable selected button
     }
 
     public void onDangerousButtonClicked() {
@@ -54,6 +58,7 @@ public class ProductViewModel extends AndroidViewModel {
         if (product != null) {
             repository.saveProductRating(product.getCode(), ProductRating.Rating.DANGEROUS);
         }
+        sendUpdateWidgetBroadcast();
     }
 
     public LiveData<String> getAllergens() {
@@ -86,6 +91,7 @@ public class ProductViewModel extends AndroidViewModel {
 
     public void setProductFound(Boolean found) {
         this.productFound.set(found);
+        sendUpdateWidgetBroadcast();
     }
 
     public long getCode() {
@@ -94,6 +100,12 @@ public class ProductViewModel extends AndroidViewModel {
 
     public void setCode(long code) {
         this.code = code;
+    }
+
+    private void sendUpdateWidgetBroadcast() {
+        Intent widgetUpdateIntent = new Intent(getApplication(), WidgetUpdateService.class);
+        widgetUpdateIntent.setAction(WidgetUpdateService.ACTION_SAFE_FOOD_LIST_CHANGED);
+        getApplication().startService(widgetUpdateIntent);
     }
 
 }

@@ -45,6 +45,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.MainActivity" />
         </activity>
+
+        <receiver android:name=".ui.widget.SafeFoodsWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/safe_foods_widget_info" />
+        </receiver>
+
+        <service
+            android:name=".ui.widget.ListWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <service android:name=".service.WidgetUpdateService" />
     </application>
 
 </manifest>

@@ -2,6 +2,7 @@ package eu.captaincode.allergywatch.ui.fragment;
 
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +16,7 @@ import java.util.Objects;
 
 import eu.captaincode.allergywatch.R;
 import eu.captaincode.allergywatch.databinding.FragmentProductBinding;
+import eu.captaincode.allergywatch.service.WidgetUpdateService;
 import eu.captaincode.allergywatch.viewmodel.ProductViewModel;
 import eu.captaincode.allergywatch.viewmodel.ProductViewModelFactory;
 
@@ -53,10 +55,17 @@ public class ProductFragment extends Fragment {
             if (product != null) {
                 viewModel.setProduct(product);
                 viewModel.setProductFound(true);
+                sendUpdateWidgetBroadcast();
             } else {
                 viewModel.setProductFound(false);
             }
         });
+    }
+
+    private void sendUpdateWidgetBroadcast() {
+        Intent widgetUpdateIntent = new Intent(getContext(), WidgetUpdateService.class);
+        widgetUpdateIntent.setAction(WidgetUpdateService.ACTION_SAFE_FOOD_LIST_CHANGED);
+        getActivity().startService(widgetUpdateIntent);
     }
 
 }

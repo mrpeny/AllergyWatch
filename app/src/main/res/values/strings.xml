@@ -37,4 +37,7 @@
     <string name="safe_button">Safe</string>
     <string name="dangerous_button">Dangerous</string>
 
+    <!-- WIDGET -->
+    <string name="appwidget_empty_text">Mark a food as Safe to show it here</string>
+
 </resources>
