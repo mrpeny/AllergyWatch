@@ -33,7 +33,7 @@ public class SafeFoodsWidgetProvider extends AppWidgetProvider {
     }
 
 
-    private void addPendingIntentTemplate(Context context, RemoteViews views) {
+    private static void addPendingIntentTemplate(Context context, RemoteViews views) {
         Intent launchProductActivityIntent = new Intent(context, ProductActivity.class);
         PendingIntent launchProductActivityPendingIntent = PendingIntent.getActivity(context, 0,
                 launchProductActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -49,8 +49,14 @@ public class SafeFoodsWidgetProvider extends AppWidgetProvider {
         }
     }
 
+    public static void updateAppWidgets(Context context, AppWidgetManager appWidgetManager,
+                                        int[] appWidgetIds) {
+        for (int appWidgetId : appWidgetIds) {
+            updateAppWidget(context, appWidgetManager, appWidgetId);
+        }
+    }
 
-    private void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
+    public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                  int appWidgetId) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.safe_foods_widget);
 
