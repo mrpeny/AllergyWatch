@@ -162,4 +162,7 @@ public class DataRepository {
         return calendar.getTime();
     }
 
+    public LiveData<ProductRating> getProductRating(Long code) {
+        return mProductRatingDao.findBy(code);
+    }
 }

@@ -14,7 +14,9 @@ import android.view.ViewGroup;
 import java.util.Objects;
 
 import eu.captaincode.allergywatch.R;
+import eu.captaincode.allergywatch.database.entity.ProductRating;
 import eu.captaincode.allergywatch.databinding.FragmentProductBinding;
+import eu.captaincode.allergywatch.util.SnackbarUtils;
 import eu.captaincode.allergywatch.viewmodel.ProductViewModel;
 import eu.captaincode.allergywatch.viewmodel.ProductViewModelFactory;
 
@@ -23,7 +25,7 @@ public class ProductFragment extends Fragment {
     public static final String TAG_PRODUCT_FRAGMENT = "product-fragment";
 
     private FragmentProductBinding mBinding;
-    private ProductViewModel viewModel;
+    private ProductViewModel mViewModel;
 
     @Nullable
     @Override
@@ -39,9 +41,9 @@ public class ProductFragment extends Fragment {
 
         ProductViewModelFactory viewModelFactory = new ProductViewModelFactory(
                 Objects.requireNonNull(getActivity()).getApplication(), productCode);
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ProductViewModel.class);
+        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(ProductViewModel.class);
 
-        subscribeUi(viewModel);
+        subscribeUi(mViewModel);
 
         return mBinding.getRoot();
     }
@@ -57,5 +59,35 @@ public class ProductFragment extends Fragment {
                 viewModel.setProductFound(false);
             }
         });
+
+        viewModel.getObservableProductRating().observe(this, productRating -> {
+            if (productRating == null) {
+                return;
+            }
+            ProductRating.Rating rating = productRating.getRating();
+            if (rating == ProductRating.Rating.SAFE) {
+                updateButtons(true);
+            } else if (rating == ProductRating.Rating.DANGEROUS) {
+                updateButtons(false);
+            }
+        });
+
+        viewModel.getProductRatingChanged().observe(this, rating -> {
+            if (rating == ProductRating.Rating.SAFE) {
+                SnackbarUtils.showSnackbar(mBinding.clFragmentProduct,
+                        getString(R.string.product_marked_safe));
+                updateButtons(true);
+            } else if (rating == ProductRating.Rating.DANGEROUS) {
+                SnackbarUtils.showSnackbar(mBinding.clFragmentProduct,
+                        getString(R.string.product_marked_dangerous));
+                updateButtons(false);
+            }
+        });
     }
+
+    private void updateButtons(boolean safe) {
+        mBinding.btnSafe.setEnabled(!safe);
+        mBinding.btnDangerous.setEnabled(safe);
+    }
+
 }

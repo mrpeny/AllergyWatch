@@ -36,6 +36,8 @@
     <string name="allergens_mock">Gluten,Leche,Frutos de cáscara,Soja,Frutos de cáscara,Leche,Milch,Schalenfrüchte,Sojabohnen, noisettes</string>
     <string name="safe_button">Safe</string>
     <string name="dangerous_button">Dangerous</string>
+    <string name="product_marked_safe">Product marked as Safe</string>
+    <string name="product_marked_dangerous">Product marked as Dangerous</string>
 
     <!-- WIDGET -->
     <string name="appwidget_empty_text">Mark a food as Safe to show it here</string>

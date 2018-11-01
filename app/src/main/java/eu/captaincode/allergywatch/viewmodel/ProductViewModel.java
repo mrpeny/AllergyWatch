@@ -18,12 +18,15 @@ import eu.captaincode.allergywatch.database.entity.Product;
 import eu.captaincode.allergywatch.database.entity.ProductRating;
 import eu.captaincode.allergywatch.repository.DataRepository;
 import eu.captaincode.allergywatch.service.WidgetUpdateService;
+import eu.captaincode.allergywatch.ui.events.SingleLiveEvent;
 
 public class ProductViewModel extends AndroidViewModel {
 
     private final LiveData<Product> mObservableProduct;
+    private final LiveData<ProductRating> mObservableProductRating;
     public MutableLiveData<Product> product = new MutableLiveData<>();
     public ObservableField<Boolean> productFound = new ObservableField<>();
+    private final SingleLiveEvent<ProductRating.Rating> mProductRatingChanged = new SingleLiveEvent<>();
 
     private DataRepository repository;
     private long code;
@@ -32,6 +35,7 @@ public class ProductViewModel extends AndroidViewModel {
         super(application);
         this.code = code;
         this.mObservableProduct = repository.getProduct(code);
+        this.mObservableProductRating = repository.getProductRating(code);
         this.repository = repository;
         this.productFound.set(true);
     }
@@ -46,19 +50,30 @@ public class ProductViewModel extends AndroidViewModel {
 
     public void onSafeButtonClicked() {
         Product product = this.product.getValue();
-        if (product != null) {
-            repository.saveProductRating(product.getCode(), ProductRating.Rating.SAFE);
+        if (product == null) {
+            return;
         }
+        ProductRating.Rating newRating = ProductRating.Rating.SAFE;
+        repository.saveProductRating(product.getCode(), newRating);
         startWidgetUpdateService();
-        // TODO: Show Snackbar confirming operation with UNDO action and disable selected button
+        mProductRatingChanged.setValue(newRating);
     }
 
     public void onDangerousButtonClicked() {
         Product product = this.product.getValue();
-        if (product != null) {
-            repository.saveProductRating(product.getCode(), ProductRating.Rating.DANGEROUS);
+        if (product == null) {
+            return;
         }
+        ProductRating.Rating newRating = ProductRating.Rating.DANGEROUS;
+        repository.saveProductRating(product.getCode(), newRating);
         startWidgetUpdateService();
+        mProductRatingChanged.setValue(newRating);
+    }
+
+    private void startWidgetUpdateService() {
+        Intent widgetUpdateIntent = new Intent(getApplication(), WidgetUpdateService.class);
+        widgetUpdateIntent.setAction(WidgetUpdateService.ACTION_SAFE_FOOD_LIST_CHANGED);
+        getApplication().startService(widgetUpdateIntent);
     }
 
     public LiveData<String> getAllergens() {
@@ -85,6 +100,12 @@ public class ProductViewModel extends AndroidViewModel {
         return this.mObservableProduct;
     }
 
+    public LiveData<ProductRating> getObservableProductRating() {
+        return this.mObservableProductRating;
+    }
+
+
+
     public void setProduct(Product product) {
         this.product.setValue(product);
     }
@@ -101,10 +122,9 @@ public class ProductViewModel extends AndroidViewModel {
         this.code = code;
     }
 
-    private void startWidgetUpdateService() {
-        Intent widgetUpdateIntent = new Intent(getApplication(), WidgetUpdateService.class);
-        widgetUpdateIntent.setAction(WidgetUpdateService.ACTION_SAFE_FOOD_LIST_CHANGED);
-        getApplication().startService(widgetUpdateIntent);
+    public SingleLiveEvent<ProductRating.Rating> getProductRatingChanged() {
+        return mProductRatingChanged;
     }
+
 
 }
