@@ -50,6 +50,9 @@
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="eu.captaincode.allergywatch.action.SAFE_FOOD_LIST_CHANGED" />
+            </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"

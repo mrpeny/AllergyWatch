@@ -49,7 +49,7 @@ public class ProductViewModel extends AndroidViewModel {
         if (product != null) {
             repository.saveProductRating(product.getCode(), ProductRating.Rating.SAFE);
         }
-        sendUpdateWidgetBroadcast();
+        startWidgetUpdateService();
         // TODO: Show Snackbar confirming operation with UNDO action and disable selected button
     }
 
@@ -58,7 +58,7 @@ public class ProductViewModel extends AndroidViewModel {
         if (product != null) {
             repository.saveProductRating(product.getCode(), ProductRating.Rating.DANGEROUS);
         }
-        sendUpdateWidgetBroadcast();
+        startWidgetUpdateService();
     }
 
     public LiveData<String> getAllergens() {
@@ -91,7 +91,6 @@ public class ProductViewModel extends AndroidViewModel {
 
     public void setProductFound(Boolean found) {
         this.productFound.set(found);
-        sendUpdateWidgetBroadcast();
     }
 
     public long getCode() {
@@ -102,7 +101,7 @@ public class ProductViewModel extends AndroidViewModel {
         this.code = code;
     }
 
-    private void sendUpdateWidgetBroadcast() {
+    private void startWidgetUpdateService() {
         Intent widgetUpdateIntent = new Intent(getApplication(), WidgetUpdateService.class);
         widgetUpdateIntent.setAction(WidgetUpdateService.ACTION_SAFE_FOOD_LIST_CHANGED);
         getApplication().startService(widgetUpdateIntent);

@@ -11,6 +11,7 @@ import java.util.List;
 import eu.captaincode.allergywatch.AllergyWatchApp;
 import eu.captaincode.allergywatch.R;
 import eu.captaincode.allergywatch.database.entity.Product;
+import eu.captaincode.allergywatch.database.entity.ProductRating;
 import eu.captaincode.allergywatch.ui.ProductActivity;
 
 public class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
@@ -29,8 +30,8 @@ public class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFac
 
     @Override
     public void onDataSetChanged() {
-        mProductList = mAllergyWatchApp.getDatabase().productDao().findAllProducts();
-
+        mProductList = mAllergyWatchApp.getDatabase().productDao().
+                findAllByRating(ProductRating.Rating.SAFE);
     }
 
     @Override

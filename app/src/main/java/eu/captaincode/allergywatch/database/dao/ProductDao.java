@@ -45,5 +45,9 @@ public interface ProductDao {
 
     @Query("SELECT * FROM product WHERE code IN " +
             "(SELECT barcode FROM ProductRating WHERE rating = :rating) ORDER BY createDate DESC")
-    LiveData<List<Product>> findAllByRating(ProductRating.Rating rating);
+    LiveData<List<Product>> findAllObservableByRating(ProductRating.Rating rating);
+
+    @Query("SELECT * FROM product WHERE code IN " +
+            "(SELECT barcode FROM ProductRating WHERE rating = :rating) ORDER BY createDate DESC")
+    List<Product> findAllByRating(ProductRating.Rating rating);
 }

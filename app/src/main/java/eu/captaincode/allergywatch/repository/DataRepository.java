@@ -73,12 +73,12 @@ public class DataRepository {
 
     public LiveData<List<Product>> getSafeProducts() {
         refreshProducts();
-        return mProductDao.findAllByRating(ProductRating.Rating.SAFE);
+        return mProductDao.findAllObservableByRating(ProductRating.Rating.SAFE);
     }
 
     public LiveData<List<Product>> getDangerousProducts() {
         refreshProducts();
-        return mProductDao.findAllByRating(ProductRating.Rating.DANGEROUS);
+        return mProductDao.findAllObservableByRating(ProductRating.Rating.DANGEROUS);
     }
 
     public void refreshProducts() {

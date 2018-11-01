@@ -32,15 +32,6 @@ public class SafeFoodsWidgetProvider extends AppWidgetProvider {
         return AppWidgetManager.getInstance(context).getAppWidgetIds(name);
     }
 
-
-    private void addPendingIntentTemplate(Context context, RemoteViews views) {
-        Intent launchProductActivityIntent = new Intent(context, ProductActivity.class);
-        PendingIntent launchProductActivityPendingIntent = PendingIntent.getActivity(context, 0,
-                launchProductActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        views.setPendingIntentTemplate(R.id.lv_safe_foods_widget_list,
-                launchProductActivityPendingIntent);
-    }
-
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
@@ -48,7 +39,6 @@ public class SafeFoodsWidgetProvider extends AppWidgetProvider {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
     }
-
 
     private void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                  int appWidgetId) {
@@ -61,8 +51,17 @@ public class SafeFoodsWidgetProvider extends AppWidgetProvider {
         addPendingIntentTemplate(context, views);
 
         appWidgetManager.updateAppWidget(appWidgetId, views);
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId,
+                R.id.lv_safe_foods_widget_list);
     }
 
+    private void addPendingIntentTemplate(Context context, RemoteViews views) {
+        Intent launchProductActivityIntent = new Intent(context, ProductActivity.class);
+        PendingIntent launchProductActivityPendingIntent = PendingIntent.getActivity(context, 0,
+                launchProductActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        views.setPendingIntentTemplate(R.id.lv_safe_foods_widget_list,
+                launchProductActivityPendingIntent);
+    }
     @Override
     public void onEnabled(Context context) {
         // Enter relevant functionality for when the first widget is created
@@ -73,6 +72,4 @@ public class SafeFoodsWidgetProvider extends AppWidgetProvider {
         // Enter relevant functionality for when the last widget is disabled
     }
 
-
 }
-
