@@ -2,16 +2,17 @@
     android:id="@+id/ll_appwidget_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/widget_margin"
     android:background="@color/colorPrimary"
-    android:orientation="vertical"
-    android:padding="@dimen/widget_margin">
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/widget_title_style"
+        android:text="@string/safe_foods" />
 
     <ListView
         android:id="@+id/lv_safe_foods_widget_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary" />
+        android:layout_height="match_parent" />
 
     <TextView
         android:id="@+id/appwidget_empty_text"

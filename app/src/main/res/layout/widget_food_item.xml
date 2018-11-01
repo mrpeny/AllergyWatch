@@ -4,13 +4,17 @@
     android:id="@+id/ll_food_item_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/widget_list_item_margin">
+    android:background="@color/colorPrimaryLight"
+    android:gravity="center_vertical"
+    android:minHeight="48dp"
+    android:padding="@dimen/widget_padding">
 
     <TextView
         android:id="@+id/tv_food_item_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="4"
+        android:textColor="@color/primaryText"
         tools:text="Nutella" />
 
     <TextView
@@ -19,6 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="2"
         android:gravity="center"
+        android:textColor="@color/primaryText"
         tools:text="850g" />
 
 </LinearLayout>

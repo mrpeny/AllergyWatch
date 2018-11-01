@@ -45,15 +45,28 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <!-- Widget themes. -->
     <style name="SafeFoodsWidgetEmptyTextStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
-        <item name="android:layout_margin">@dimen/widget_margin</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">@dimen/widget_padding</item>
         <item name="android:background">@color/colorPrimary</item>
         <item name="android:contentDescription">@string/appwidget_empty_text</item>
         <item name="android:textSize">@dimen/widget_text_size</item>
         <item name="android:textStyle">bold|italic</item>
+        <item name="android:textColor">@color/primaryText</item>
+    </style>
+
+    <style name="widget_title_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@color/colorAccent</item>
+        <item name="android:padding">@dimen/widget_padding</item>
     </style>
 
 </resources>
