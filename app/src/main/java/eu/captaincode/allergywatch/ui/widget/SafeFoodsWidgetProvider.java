@@ -1,6 +1,7 @@
 package eu.captaincode.allergywatch.ui.widget;
 
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
@@ -57,8 +58,9 @@ public class SafeFoodsWidgetProvider extends AppWidgetProvider {
 
     private void addPendingIntentTemplate(Context context, RemoteViews views) {
         Intent launchProductActivityIntent = new Intent(context, ProductActivity.class);
-        PendingIntent launchProductActivityPendingIntent = PendingIntent.getActivity(context, 0,
-                launchProductActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent launchProductActivityPendingIntent = TaskStackBuilder.create(context)
+                .addNextIntentWithParentStack(launchProductActivityIntent)
+                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setPendingIntentTemplate(R.id.lv_safe_foods_widget_list,
                 launchProductActivityPendingIntent);
     }
