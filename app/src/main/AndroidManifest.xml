@@ -19,9 +19,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="barcode" />
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-8985279647744804~7086093505" />
 
         <activity
             android:name=".ui.MainActivity"

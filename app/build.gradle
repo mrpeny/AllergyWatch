@@ -25,6 +25,20 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    flavorDimensions "full"
+
+    productFlavors {
+        free {
+            dimension "full"
+            applicationId "eu.captaincode.allergywatch.free"
+        }
+        paid {
+            dimension "full"
+            applicationId "eu.captaincode.allergywatch.paid"
+        }
+    }
+
 }
 
 dependencies {
@@ -60,14 +74,14 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:$room_version"
 
     // Barcode scanning
-    implementation 'com.google.firebase:firebase-core:16.0.3'
-    implementation 'com.google.firebase:firebase-ml-vision:17.0.0'
+    implementation 'com.google.firebase:firebase-core:16.0.4'
+    implementation 'com.google.firebase:firebase-ml-vision:18.0.1'
 
     // Image processing
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     // Advertisement
-    implementation 'com.google.android.gms:play-services-ads:15.0.1'
+    implementation 'com.google.firebase:firebase-ads:17.0.0'
 
     // Testing
     testImplementation 'junit:junit:4.12'

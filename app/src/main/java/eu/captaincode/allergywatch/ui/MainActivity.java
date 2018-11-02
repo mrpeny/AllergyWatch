@@ -13,6 +13,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.google.android.gms.ads.MobileAds;
+
 import eu.captaincode.allergywatch.R;
 import eu.captaincode.allergywatch.databinding.ActivityMainBinding;
 import eu.captaincode.allergywatch.ui.adapter.ProductListAdapter;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        MobileAds.initialize(this, "ca-app-pub-8985279647744804~7086093505");
         setSupportActionBar(mBinding.toolbar);
 
         setupNavigationDrawer();
