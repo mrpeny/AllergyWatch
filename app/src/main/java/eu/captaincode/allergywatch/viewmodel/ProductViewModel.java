@@ -126,5 +126,8 @@ public class ProductViewModel extends AndroidViewModel {
         return mProductRatingChanged;
     }
 
+    public void deleteSelectedProduct() {
+        repository.deleteProduct(this.code);
+    }
 
 }

@@ -168,4 +168,8 @@ public class DataRepository {
     public LiveData<ProductRating> getProductRating(Long code) {
         return mProductRatingDao.findBy(code);
     }
+
+    public void deleteProduct(long barcode) {
+        mExecutors.diskIO().execute(() -> mProductDao.delete(barcode));
+    }
 }

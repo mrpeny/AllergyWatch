@@ -50,4 +50,7 @@ public interface ProductDao {
     @Query("SELECT * FROM product WHERE code IN " +
             "(SELECT barcode FROM ProductRating WHERE rating = :rating) ORDER BY createDate DESC")
     List<Product> findAllByRating(ProductRating.Rating rating);
+
+    @Query("DELETE FROM product WHERE code = :code")
+    void delete(long code);
 }

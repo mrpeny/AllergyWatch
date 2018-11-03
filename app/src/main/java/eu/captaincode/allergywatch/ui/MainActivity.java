@@ -50,8 +50,6 @@ public class MainActivity extends AppCompatActivity implements
 
         mBinding.navView.getMenu().findItem(R.id.nav_history).setChecked(true);
         mBinding.navView.setNavigationItemSelectedListener(this);
-        // TODO: Implement Always open NavDrawer
-        // https://stackoverflow.com/questions/17133541/navigation-drawer-set-as-always-opened-on-tablets/50646711#50646711
     }
 
     private void showMasterFragment(int listType) {
