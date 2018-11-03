@@ -3,11 +3,13 @@ package eu.captaincode.allergywatch.ui.fragment;
 import android.app.Activity;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -91,10 +93,16 @@ public class MasterFragment extends Fragment {
     }
 
     private void setupRecyclerView() {
-        final ProductListAdapter productListAdapter = new ProductListAdapter(getContext(),
+        Context context = getContext();
+        assert context != null;
+        final ProductListAdapter productListAdapter = new ProductListAdapter(context,
                 (ProductListAdapter.ProductClickListener) getActivity());
         mBinding.rvProductList.setAdapter(productListAdapter);
-        mBinding.rvProductList.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context,
+                layoutManager.getOrientation());
+        mBinding.rvProductList.setLayoutManager(layoutManager);
+        mBinding.rvProductList.addItemDecoration(dividerItemDecoration);
 
         loadProducts(productListAdapter);
     }

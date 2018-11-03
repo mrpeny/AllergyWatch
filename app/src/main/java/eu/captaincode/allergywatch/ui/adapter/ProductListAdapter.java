@@ -8,9 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import eu.captaincode.allergywatch.R;
 import eu.captaincode.allergywatch.database.entity.Product;
 
@@ -38,6 +41,11 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Product product = mProductList.get(position);
+        Picasso.get()
+                .load(product.getImageFrontThumbUrl())
+                .noFade()
+                .placeholder(R.drawable.hazelnuts)
+                .into(holder.productImageView);
         holder.nameTextView.setText(product.getProductName());
         holder.barcodeTextView.setText(String.valueOf(product.getCode()));
     }
@@ -58,11 +66,13 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private CircleImageView productImageView;
         private TextView nameTextView;
         private TextView barcodeTextView;
 
         ViewHolder(View itemView) {
             super(itemView);
+            productImageView = itemView.findViewById(R.id.iv_product_list_item);
             nameTextView = itemView.findViewById(R.id.tv_product_item_name);
             barcodeTextView = itemView.findViewById(R.id.tv_product_item_barcode);
             itemView.setOnClickListener(this);
@@ -74,4 +84,5 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             mProductClickListener.onProductClicked(mProductList.get(position).getCode());
         }
     }
+
 }
