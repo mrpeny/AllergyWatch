@@ -345,8 +345,6 @@ public class CameraFragment extends Fragment implements
             return;
         }
         this.mDetectedBarcode = detectedBarcode;
-        Toast.makeText(getActivity(), detectedBarcode, Toast.LENGTH_SHORT)
-                .show();
         this.barcodeDetectionListener.onBarcodeDetected(detectedBarcode);
     }
 

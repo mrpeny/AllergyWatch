@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements
             if (resultCode == RESULT_OK) {
                 Log.i(TAG, "Barcode detection Activity result received successfully");
                 String detectedBarcode = data.getStringExtra(CameraActivity.EXTRA_BARCODE);
-                launchProductActivity(Long.valueOf(detectedBarcode));
+                showProductDetails(Long.valueOf(detectedBarcode));
             }
         }
     }
@@ -125,6 +125,10 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onProductClicked(Long code) {
+        showProductDetails(code);
+    }
+
+    private void showProductDetails(Long code) {
         if (mTwoPane) {
             showProductFragment(code);
         } else {
@@ -157,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements
         Long productCode;
         if (bundle != null && bundle.containsKey(ProductActivity.KEY_PRODUCT_CODE)) {
             productCode = bundle.getLong(ProductActivity.KEY_PRODUCT_CODE);
-            onProductClicked(productCode);
+            showProductDetails(productCode);
         }
     }
 
