@@ -125,8 +125,6 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    // TODO: Change to subscription model
-    // https://developer.android.com/topic/libraries/architecture/viewmodel#sharing
     @Override
     public void onProductClicked(Long code) {
         if (mTwoPane) {

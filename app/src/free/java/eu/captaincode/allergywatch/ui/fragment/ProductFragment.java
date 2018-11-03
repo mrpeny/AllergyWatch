@@ -2,11 +2,14 @@ package eu.captaincode.allergywatch.ui.fragment;
 
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +46,7 @@ public class ProductFragment extends Fragment {
         setupViewModel();
         subscribeUi(mViewModel);
         mTwoPane = getResources().getBoolean(R.bool.isTablet);
+        customizeButtons();
         setupAdMob();
 
         return mBinding.getRoot();
@@ -112,6 +116,17 @@ public class ProductFragment extends Fragment {
         MobileAds.initialize(getActivity(), "ca-app-pub-8985279647744804~7086093505");
         AdRequest adRequest = new AdRequest.Builder().build();
         mBinding.adView.loadAd(adRequest);
+    }
+
+    private void customizeButtons() {
+        Context context = getContext();
+        assert context != null;
+        mBinding.btnSafe.getBackground().setColorFilter(
+                ContextCompat.getColor(context, android.R.color.holo_green_light),
+                PorterDuff.Mode.MULTIPLY);
+        mBinding.btnDangerous.getBackground().setColorFilter(
+                ContextCompat.getColor(context, android.R.color.holo_red_light),
+                PorterDuff.Mode.MULTIPLY);
     }
 
     private void updateButtons(boolean safe) {

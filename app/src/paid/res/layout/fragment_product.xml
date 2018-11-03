@@ -20,11 +20,7 @@
         android:layout_height="match_parent">
 
         <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="fill_vertical"
-            android:clipToPadding="false"
-            android:isScrollContainer="false"
+            style="@style/ProductFragmentScrollview"
             android:visibility="@{safeUnbox(productViewModel.productFound) ? View.VISIBLE : View.GONE}"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -35,13 +31,8 @@
 
                 <ImageView
                     android:id="@+id/iv_product"
-                    android:layout_width="356dp"
-                    android:layout_height="150dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="16dp"
+                    style="@style/ProductFragmentImage"
                     android:contentDescription="@string/product_image_description"
-                    android:scaleType="fitCenter"
                     app:imageUrl="@{productViewModel.product.imageFrontUrl}"
                     app:layout_constraintDimensionRatio=""
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -51,10 +42,7 @@
 
                 <View
                     android:id="@+id/view"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:background="@color/colorPrimary"
-                    android:backgroundTint="@color/colorPrimary"
+                    style="@style/ProductFragmentTitleBackground"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_product_name"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -62,39 +50,38 @@
 
                 <TextView
                     android:id="@+id/tv_product_name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
+                    style="@style/ProductFragmentNameTextView"
                     android:text="@{productViewModel.product.productName}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    android:textColor="@color/primaryText"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_quantity"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/iv_product"
                     tools:text="Nutella" />
 
+
+                <TextView
+                    android:id="@+id/tv_quantity"
+                    style="@style/ProductFragmentQuantityTextView"
+                    android:text="@{productViewModel.product.quantity}"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/tv_product_name"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/tv_product_name"
+                    tools:text="850g" />
+
                 <TextView
                     android:id="@+id/tv_ingredients_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    style="@style/ProductFragmentSubtitleText"
                     android:text="@string/ingredients_title"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     app:layout_constraintStart_toStartOf="@+id/tv_product_name"
                     app:layout_constraintTop_toBottomOf="@+id/tv_product_name" />
 
                 <TextView
                     android:id="@+id/tv_ingredients"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
+                    style="@style/ProductFragmentDetailsTextView"
                     android:text="@{productViewModel.ingredients}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/tv_ingredients_title"
                     app:layout_constraintTop_toBottomOf="@+id/tv_ingredients_title"
@@ -115,9 +102,7 @@
 
                 <TextView
                     android:id="@+id/tv_allergens_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    style="@style/ProductFragmentSubtitleText"
                     android:text="@string/allergens_title"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     app:layout_constraintStart_toStartOf="@+id/tv_ingredients"
@@ -125,41 +110,19 @@
 
                 <TextView
                     android:id="@+id/tv_allergens"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
+                    style="@style/ProductFragmentDetailsTextView"
                     android:text='@{productViewModel.allergens}'
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/tv_allergens_title"
                     app:layout_constraintTop_toBottomOf="@+id/tv_allergens_title"
                     tools:text="@string/allergens_mock" />
 
-
-                <TextView
-                    android:id="@+id/tv_quantity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:paddingBottom="4dp"
-                    android:text="@{productViewModel.product.quantity}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/tv_product_name"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    tools:text="850g" />
-
                 <Button
                     android:id="@+id/btn_safe"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:backgroundTint="@color/colorAccent"
-                    android:minWidth="150dp"
+                    style="@style/ProductFragmentButtonSafe"
                     android:onClick="@{() -> productViewModel.onSafeButtonClicked()}"
                     android:text="@string/safe_button"
-                    android:textAlignment="center"
                     app:layout_constraintEnd_toStartOf="@+id/btn_dangerous"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintHorizontal_chainStyle="spread"
@@ -168,10 +131,7 @@
 
                 <Button
                     android:id="@+id/btn_dangerous"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/colorAccent"
-                    android:minWidth="150dp"
+                    style="@style/ProductFragmentButtonDangerous"
                     android:onClick="@{() -> productViewModel.onDangerousButtonClicked()}"
                     android:text="@string/dangerous_button"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -183,16 +143,12 @@
         </ScrollView>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            style="@style/ProductFragmentLinearLayout"
             android:visibility="@{safeUnbox(productViewModel.productFound) ? View.GONE : View.VISIBLE}"
             tools:visibility="gone">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
+                style="@style/ProductFragmentEmptyView"
                 android:text="@{@string/product_not_found(productViewModel.code)}"
                 tools:text="@string/product_not_found" />
         </LinearLayout>

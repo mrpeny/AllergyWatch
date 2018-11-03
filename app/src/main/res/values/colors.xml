@@ -10,4 +10,8 @@
     <color name="divider">#BDBDBD</color>
 
     <color name="barcode_aim">#ed0000</color>
+
+    <!-- Button colors -->
+    <color name="buttonStart">#9cff57</color>
+    <color name="buttonEnd">#1faa00</color>
 </resources>
