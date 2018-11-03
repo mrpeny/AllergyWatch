@@ -25,6 +25,10 @@ public class ProductFragment extends Fragment {
     public static final String TAG_PRODUCT_FRAGMENT = "product-fragment";
 
     private FragmentProductBinding mBinding;
+    private ProductViewModel mViewModel;
+    private boolean mTwoPane;
+    private int mSelectedListType;
+    private Long mProductCode;
 
     @Nullable
     @Override
@@ -32,19 +36,30 @@ public class ProductFragment extends Fragment {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_product, container, false);
         mBinding.setLifecycleOwner(this);
 
-        Bundle bundle = getArguments();
-        Long productCode = 0L;
-        if (bundle != null && bundle.containsKey(KEY_PRODUCT_CODE)) {
-            productCode = bundle.getLong(KEY_PRODUCT_CODE);
-        }
+        getExtras();
+        setupViewModel();
+        subscribeUi(mViewModel);
+        mTwoPane = getResources().getBoolean(R.bool.isTablet);
 
-        ProductViewModelFactory viewModelFactory = new ProductViewModelFactory(
-                Objects.requireNonNull(getActivity()).getApplication(), productCode);
-        ProductViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(ProductViewModel.class);
-
-        subscribeUi(viewModel);
+        subscribeUi(mViewModel);
 
         return mBinding.getRoot();
+    }
+
+    private void getExtras() {
+        Bundle bundle = getArguments();
+        if (bundle != null && bundle.containsKey(KEY_PRODUCT_CODE)) {
+            mProductCode = bundle.getLong(KEY_PRODUCT_CODE);
+        }
+        if (bundle != null && bundle.containsKey(MasterFragment.KEY_LIST_TYPE)) {
+            mSelectedListType = bundle.getInt(MasterFragment.KEY_LIST_TYPE);
+        }
+    }
+
+    private void setupViewModel() {
+        ProductViewModelFactory viewModelFactory = new ProductViewModelFactory(
+                Objects.requireNonNull(getActivity()).getApplication(), mProductCode);
+        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(ProductViewModel.class);
     }
 
     private void subscribeUi(final ProductViewModel viewModel) {
@@ -72,6 +87,12 @@ public class ProductFragment extends Fragment {
         });
 
         viewModel.getProductRatingChanged().observe(this, rating -> {
+            if (mTwoPane && mSelectedListType != MasterFragment.LIST_TYPE_HISTORY) {
+                Objects.requireNonNull(getActivity()).getSupportFragmentManager()
+                        .beginTransaction()
+                        .remove(this).commit();
+                return;
+            }
             if (rating == ProductRating.Rating.SAFE) {
                 SnackbarUtils.showSnackbar(mBinding.clFragmentProduct,
                         getString(R.string.product_marked_safe));

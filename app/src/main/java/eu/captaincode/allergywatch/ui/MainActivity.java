@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private ActivityMainBinding mBinding;
     private boolean mTwoPane;
+    private int mSelectedListType;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -84,13 +85,16 @@ public class MainActivity extends AppCompatActivity implements
         if (id == R.id.nav_camera) {
             startCameraActivityForResult();
         } else if (id == R.id.nav_safe_foods) {
-            showMasterFragment(MasterFragment.LIST_TYPE_SAFE);
+            mSelectedListType = MasterFragment.LIST_TYPE_SAFE;
+            showMasterFragment(mSelectedListType);
             removeProductFragment();
         } else if (id == R.id.nav_dangerous_foods) {
-            showMasterFragment(MasterFragment.LIST_TYPE_DANGEROUS);
+            mSelectedListType = MasterFragment.LIST_TYPE_DANGEROUS;
+            showMasterFragment(mSelectedListType);
             removeProductFragment();
         } else if (id == R.id.nav_history) {
-            showMasterFragment(MasterFragment.LIST_TYPE_HISTORY);
+            mSelectedListType = MasterFragment.LIST_TYPE_HISTORY;
+            showMasterFragment(mSelectedListType);
             removeProductFragment();
         }
 
@@ -142,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements
         ProductFragment fragment = new ProductFragment();
         Bundle bundle = new Bundle();
         bundle.putLong(ProductFragment.KEY_PRODUCT_CODE, barcode);
+        bundle.putInt(MasterFragment.KEY_LIST_TYPE, mSelectedListType);
         fragment.setArguments(bundle);
 
         getSupportFragmentManager().beginTransaction()

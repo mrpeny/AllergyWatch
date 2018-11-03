@@ -29,6 +29,9 @@ public class ProductFragment extends Fragment {
 
     private FragmentProductBinding mBinding;
     private ProductViewModel mViewModel;
+    private boolean mTwoPane;
+    private int mSelectedListType;
+    private Long mProductCode;
 
     @Nullable
     @Override
@@ -36,24 +39,31 @@ public class ProductFragment extends Fragment {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_product, container, false);
         mBinding.setLifecycleOwner(this);
 
-        Bundle bundle = getArguments();
-        Long productCode = 0L;
-        if (bundle != null && bundle.containsKey(KEY_PRODUCT_CODE)) {
-            productCode = bundle.getLong(KEY_PRODUCT_CODE);
-        }
-
-        ProductViewModelFactory viewModelFactory = new ProductViewModelFactory(
-                Objects.requireNonNull(getActivity()).getApplication(), productCode);
-        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(ProductViewModel.class);
-
+        getExtras();
+        setupViewModel();
         subscribeUi(mViewModel);
-
-        MobileAds.initialize(getActivity(), "ca-app-pub-8985279647744804~7086093505");
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mBinding.adView.loadAd(adRequest);
+        mTwoPane = getResources().getBoolean(R.bool.isTablet);
+        setupAdMob();
 
         return mBinding.getRoot();
     }
+
+    private void getExtras() {
+        Bundle bundle = getArguments();
+        if (bundle != null && bundle.containsKey(KEY_PRODUCT_CODE)) {
+            mProductCode = bundle.getLong(KEY_PRODUCT_CODE);
+        }
+        if (bundle != null && bundle.containsKey(MasterFragment.KEY_LIST_TYPE)) {
+            mSelectedListType = bundle.getInt(MasterFragment.KEY_LIST_TYPE);
+        }
+    }
+
+    private void setupViewModel() {
+        ProductViewModelFactory viewModelFactory = new ProductViewModelFactory(
+                Objects.requireNonNull(getActivity()).getApplication(), mProductCode);
+        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(ProductViewModel.class);
+    }
+
 
     private void subscribeUi(final ProductViewModel viewModel) {
         mBinding.setProductViewModel(viewModel);
@@ -80,6 +90,12 @@ public class ProductFragment extends Fragment {
         });
 
         viewModel.getProductRatingChanged().observe(this, rating -> {
+            if (mTwoPane && mSelectedListType != MasterFragment.LIST_TYPE_HISTORY) {
+                Objects.requireNonNull(getActivity()).getSupportFragmentManager()
+                        .beginTransaction()
+                        .remove(this).commit();
+                return;
+            }
             if (rating == ProductRating.Rating.SAFE) {
                 SnackbarUtils.showSnackbar(mBinding.clFragmentProduct,
                         getString(R.string.product_marked_safe));
@@ -90,6 +106,12 @@ public class ProductFragment extends Fragment {
                 updateButtons(false);
             }
         });
+    }
+
+    private void setupAdMob() {
+        MobileAds.initialize(getActivity(), "ca-app-pub-8985279647744804~7086093505");
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mBinding.adView.loadAd(adRequest);
     }
 
     private void updateButtons(boolean safe) {
