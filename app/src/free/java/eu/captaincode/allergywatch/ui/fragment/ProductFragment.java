@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
 
 import java.util.Objects;
 
@@ -47,6 +48,7 @@ public class ProductFragment extends Fragment {
 
         subscribeUi(mViewModel);
 
+        MobileAds.initialize(getActivity(), "ca-app-pub-8985279647744804~7086093505");
         AdRequest adRequest = new AdRequest.Builder().build();
         mBinding.adView.loadAd(adRequest);
 

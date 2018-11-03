@@ -11,8 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.ads.AdRequest;
-
 import java.util.Objects;
 
 import eu.captaincode.allergywatch.R;
@@ -46,9 +44,6 @@ public class ProductFragment extends Fragment {
         mViewModel = ViewModelProviders.of(this, viewModelFactory).get(ProductViewModel.class);
 
         subscribeUi(mViewModel);
-
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mBinding.adView.loadAd(adRequest);
 
         return mBinding.getRoot();
     }
