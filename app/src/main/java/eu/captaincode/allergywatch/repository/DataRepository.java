@@ -116,22 +116,25 @@ public class DataRepository {
                     @Override
                     public void onResponse(@NonNull Call<ProductSearchResponse> call,
                                            @NonNull final Response<ProductSearchResponse> response) {
-                        Log.i(TAG, "Data refreshed from the network");
+                        Log.i(TAG, "Data fetched from the network");
                         mExecutors.networkIO().execute(() -> {
                             ProductSearchResponse productSearchResponse = response.body();
-                            if (productSearchResponse != null &&
-                                    productSearchResponse.getStatus() == CODE_PRODUCT_FOUND) {
-
-                                Product refreshedProduct = productSearchResponse.getProduct();
-                                refreshedProduct.setLastRefresh(new Date());
-                                if (oldProduct != null) {
-                                    refreshedProduct.setCreateDate(oldProduct.getCreateDate());
+                            if (productSearchResponse != null) {
+                                if (productSearchResponse.getStatus() == CODE_PRODUCT_FOUND) {
+                                    Product refreshedProduct = productSearchResponse.getProduct();
+                                    refreshedProduct.setLastRefresh(new Date());
+                                    if (oldProduct != null) {
+                                        refreshedProduct.setCreateDate(oldProduct.getCreateDate());
+                                    }
+                                    Log.i(TAG, "Saving product with code: " + refreshedProduct.getCode());
+                                    mProductDao.save(refreshedProduct);
+                                } else {
+                                    Log.d(TAG, "Search result returned with status code: " +
+                                            productSearchResponse.getStatus() + " and status message: " +
+                                            productSearchResponse.getStatusVerbose());
                                 }
-                                Log.i(TAG, "Saving product with code: " +
-                                        refreshedProduct.getCode());
-                                mProductDao.save(refreshedProduct);
                             } else {
-                                Log.d(TAG, "Search result was null or returned with error");
+                                Log.d(TAG, "Search result was null. No product saved.");
                             }
                         });
                     }
