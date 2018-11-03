@@ -1,13 +1,11 @@
 package eu.captaincode.allergywatch.barcode;
 
 import android.media.Image;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetector;
@@ -35,23 +33,14 @@ public class FirebaseBarcodeDetector {
         }
     };
 
-    private OnFailureListener onFailureListener = new OnFailureListener() {
-        @Override
-        public void onFailure(@NonNull Exception e) {
-            Log.d(TAG, "Imagedetection.onFailure()");
-            e.printStackTrace();
+    private OnFailureListener onFailureListener = e -> {
+        Log.d(TAG, "Imagedetection.onFailure()");
+        e.printStackTrace();
 
-        }
     };
 
     private OnCompleteListener<List<FirebaseVisionBarcode>> onCompleteListener =
-            new OnCompleteListener<List<FirebaseVisionBarcode>>() {
-        @Override
-        public void onComplete(@NonNull Task<List<FirebaseVisionBarcode>> task) {
-            Log.d(TAG, "Imagedetection.onComplete()");
-
-        }
-    };
+            task -> Log.d(TAG, "Imagedetection.onComplete()");
 
     public FirebaseBarcodeDetector(BarcodeDetectionListener detectionListener) {
         this.detectionListener = detectionListener;

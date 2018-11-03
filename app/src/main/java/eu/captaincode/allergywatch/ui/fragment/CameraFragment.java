@@ -22,7 +22,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.ImageFormat;
@@ -144,14 +143,11 @@ public class CameraFragment extends Fragment implements
      */
     private Semaphore mCameraOpenCloseLock = new Semaphore(1);
     private CaptureRequest.Builder mPreviewBuilder;
-    private ImageReader.OnImageAvailableListener mOnImageAvailableListener = new ImageReader.OnImageAvailableListener() {
-        @Override
-        public void onImageAvailable(ImageReader reader) {
-            Image image = reader.acquireLatestImage();
-            barcodeDetector.detectBarcode(image);
-            if (image != null) {
-                image.close();
-            }
+    private ImageReader.OnImageAvailableListener mOnImageAvailableListener = reader -> {
+        Image image = reader.acquireLatestImage();
+        barcodeDetector.detectBarcode(image);
+        if (image != null) {
+            image.close();
         }
     };
     // Preview logic
@@ -224,12 +220,7 @@ public class CameraFragment extends Fragment implements
         }
 
     };
-    private Runnable mLockAutoFocusRunnable = new Runnable() {
-        @Override
-        public void run() {
-            lockAutoFocus();
-        }
-    };
+    private Runnable mLockAutoFocusRunnable = () -> lockAutoFocus();
     private CameraCaptureSession.CaptureCallback mCaptureCallback
             = new CameraCaptureSession.CaptureCallback() {
 
@@ -802,12 +793,7 @@ public class CameraFragment extends Fragment implements
             final Activity activity = getActivity();
             return new AlertDialog.Builder(activity)
                     .setMessage(getArguments().getString(ARG_MESSAGE))
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            activity.finish();
-                        }
-                    })
+                    .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> activity.finish())
                     .create();
         }
 
@@ -821,20 +807,11 @@ public class CameraFragment extends Fragment implements
             final Fragment parent = getParentFragment();
             return new AlertDialog.Builder(getActivity())
                     .setMessage(R.string.permission_request)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                    .setPositiveButton(android.R.string.ok, (dialog, which) ->
                             parent.requestPermissions(CAMERA_PERMISSIONS,
-                                    REQUEST_CAMERA_PERMISSIONS);
-                        }
-                    })
+                                    REQUEST_CAMERA_PERMISSIONS))
                     .setNegativeButton(android.R.string.cancel,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    parent.getActivity().finish();
-                                }
-                            })
+                            (dialog, which) -> parent.getActivity().finish())
                     .create();
         }
 

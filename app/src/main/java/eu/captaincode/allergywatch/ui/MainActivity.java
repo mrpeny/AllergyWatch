@@ -1,6 +1,5 @@
 package eu.captaincode.allergywatch.ui;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
@@ -19,7 +18,6 @@ import eu.captaincode.allergywatch.ui.adapter.ProductListAdapter;
 import eu.captaincode.allergywatch.ui.fragment.MasterFragment;
 import eu.captaincode.allergywatch.ui.fragment.ProductFragment;
 import eu.captaincode.allergywatch.viewmodel.MainViewModel;
-import eu.captaincode.allergywatch.viewmodel.MainViewModelFactory;
 
 public class MainActivity extends AppCompatActivity implements
         ProductListAdapter.ProductClickListener, NavigationView.OnNavigationItemSelectedListener {
@@ -29,7 +27,6 @@ public class MainActivity extends AppCompatActivity implements
 
     private ActivityMainBinding mBinding;
     private boolean mTwoPane;
-    private MainViewModel mViewModel;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -38,14 +35,8 @@ public class MainActivity extends AppCompatActivity implements
         setSupportActionBar(mBinding.toolbar);
 
         setupNavigationDrawer();
-
         mTwoPane = getResources().getBoolean(R.bool.isTablet);
-
-        MainViewModelFactory viewModelFactory = new MainViewModelFactory(getApplication());
-        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
-
         showMasterFragment(MasterFragment.LIST_TYPE_HISTORY);
-
         mBinding.fab.setOnClickListener(v -> startCameraActivityForResult());
     }
 

@@ -7,8 +7,6 @@
     <!-- NAVIGATION DRAWER -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
 
     <string name="scan_food">Scan food</string>
@@ -20,8 +18,7 @@
 
     <!-- CAMERA -->
     <string name="permission_request">This sample needs permission for camera and audio recording.</string>
-    <string name="camera_error">This device doesn\'t support Camera2 API.</string>
-    <string name="camera_error_general">Problem occurred while opening the camera. Pleaset try again!</string>
+    <string name="camera_error_general">Problem occurred while opening the camera. Please try again!</string>
 
     <!-- PRODUCT DETAIL -->
     <string name="product_details_title">Product Details</string>

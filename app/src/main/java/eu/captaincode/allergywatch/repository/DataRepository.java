@@ -39,7 +39,6 @@ public class DataRepository {
     private final ProductRatingDao mProductRatingDao;
     private final AppExecutors mExecutors;
 
-    private List<Product> mProducts = new ArrayList<>();
     private MutableLiveData<List<Product>> mutableProducts = new MutableLiveData<>();
     public LiveData<List<Product>> products = mutableProducts;
 
@@ -52,6 +51,7 @@ public class DataRepository {
                 .baseUrl(BASE_URL)
                 .build();
         this.mOffWebService = mRetrofit.create(OffWebService.class);
+        List<Product> mProducts = new ArrayList<>();
         mutableProducts.postValue(mProducts);
     }
 

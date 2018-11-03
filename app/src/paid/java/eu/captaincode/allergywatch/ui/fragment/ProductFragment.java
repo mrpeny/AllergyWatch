@@ -25,7 +25,6 @@ public class ProductFragment extends Fragment {
     public static final String TAG_PRODUCT_FRAGMENT = "product-fragment";
 
     private FragmentProductBinding mBinding;
-    private ProductViewModel mViewModel;
 
     @Nullable
     @Override
@@ -41,9 +40,9 @@ public class ProductFragment extends Fragment {
 
         ProductViewModelFactory viewModelFactory = new ProductViewModelFactory(
                 Objects.requireNonNull(getActivity()).getApplication(), productCode);
-        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(ProductViewModel.class);
+        ProductViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(ProductViewModel.class);
 
-        subscribeUi(mViewModel);
+        subscribeUi(viewModel);
 
         return mBinding.getRoot();
     }
