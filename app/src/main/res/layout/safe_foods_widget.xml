@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <TextView
-        style="@style/widget_title_style"
+        style="@style/WidgetTitleStyle"
         android:text="@string/safe_foods" />
 
     <ListView

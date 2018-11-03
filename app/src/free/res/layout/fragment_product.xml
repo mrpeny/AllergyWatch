@@ -182,11 +182,9 @@
 
                 <com.google.android.gms.ads.AdView
                     android:id="@+id/adView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
                     ads:adSize="@string/banner_type"
                     ads:adUnitId="@string/banner_ad_unit_id"
+                    style="@style/AdViewStyle"
                     app:layout_constraintTop_toBottomOf="@id/btn_dangerous" />
 
             </android.support.constraint.ConstraintLayout>
