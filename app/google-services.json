@@ -1,0 +1,160 @@
+{
+  "project_info": {
+    "project_number": "901130275277",
+    "firebase_url": "https://allergywatch-3551d.firebaseio.com",
+    "project_id": "allergywatch-3551d",
+    "storage_bucket": "allergywatch-3551d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:901130275277:android:b44646e799836ad2",
+        "android_client_info": {
+          "package_name": "eu.captaincode.allergywatch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "901130275277-3u33hu3784gdlrum2afj9m0c59gfth6l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "eu.captaincode.allergywatch",
+            "certificate_hash": "0597acdec2358874c4572dd3d77f0ed705639e96"
+          }
+        },
+        {
+          "client_id": "901130275277-vud2c0prcpr4r8bus7srbts0avuts66p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "eu.captaincode.allergywatch",
+            "certificate_hash": "4b9b2b6d8bfa3721cd6780517ab3be37f73db115"
+          }
+        },
+        {
+          "client_id": "901130275277-7m8tak562e8ergo7mtf152vqaigc4p9j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "eu.captaincode.allergywatch",
+            "certificate_hash": "1fe9d4c2f300eef3530d4885286a67c10b0bc31a"
+          }
+        },
+        {
+          "client_id": "901130275277-qnfddrperllku9kjnmqk3ih3a5eo4sab.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgT3REWyfpxM34Bva9s_64J75PyuI_e-g"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "901130275277-qnfddrperllku9kjnmqk3ih3a5eo4sab.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      },
+      "admob_app_id": "ca-app-pub-8985279647744804~7086093505"
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:901130275277:android:dc08dd235085fa32",
+        "android_client_info": {
+          "package_name": "eu.captaincode.allergywatch.free"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "901130275277-7j3mp8708inq82suphqgh4k25n8n31fa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "eu.captaincode.allergywatch.free",
+            "certificate_hash": "1fe9d4c2f300eef3530d4885286a67c10b0bc31a"
+          }
+        },
+        {
+          "client_id": "901130275277-qnfddrperllku9kjnmqk3ih3a5eo4sab.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgT3REWyfpxM34Bva9s_64J75PyuI_e-g"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "901130275277-qnfddrperllku9kjnmqk3ih3a5eo4sab.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:901130275277:android:2b98d786e411cba4",
+        "android_client_info": {
+          "package_name": "eu.captaincode.allergywatch.paid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "901130275277-3j9hv4p4b5irbm861fp65gc9ml11rvps.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "eu.captaincode.allergywatch.paid",
+            "certificate_hash": "1fe9d4c2f300eef3530d4885286a67c10b0bc31a"
+          }
+        },
+        {
+          "client_id": "901130275277-qnfddrperllku9kjnmqk3ih3a5eo4sab.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgT3REWyfpxM34Bva9s_64J75PyuI_e-g"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "901130275277-qnfddrperllku9kjnmqk3ih3a5eo4sab.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
