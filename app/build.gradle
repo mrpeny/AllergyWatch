@@ -32,7 +32,6 @@ android {
             storePassword 'UdaKeystorePass2018'
         }
     }
-
     flavorDimensions "full"
 
     productFlavors {
@@ -47,7 +46,6 @@ android {
             signingConfig signingConfigs.config
         }
     }
-
 }
 
 dependencies {
@@ -80,10 +78,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-ml-vision:18.0.1'
     // Image processing
     implementation 'com.squareup.picasso:picasso:2.71828'
-    // Advertisement
-    freeImplementation 'com.google.firebase:firebase-ads:17.0.0'
     // Testing
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    /* Free product Flavor implementations */
+    // Advertisement
+    freeImplementation 'com.google.firebase:firebase-ads:17.0.0'
 }
