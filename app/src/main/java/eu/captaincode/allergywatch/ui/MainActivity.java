@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements
         mTwoPane = getResources().getBoolean(R.bool.isTablet);
         showMasterFragment(MasterFragment.LIST_TYPE_HISTORY);
         mBinding.fab.setOnClickListener(v -> startCameraActivityForResult());
+        showProductStartedFromWidget();
     }
 
     private void setupNavigationDrawer() {
@@ -148,6 +149,15 @@ public class MainActivity extends AppCompatActivity implements
                         fragment,
                         ProductFragment.TAG_PRODUCT_FRAGMENT)
                 .commitAllowingStateLoss();
+    }
+
+    private void showProductStartedFromWidget() {
+        Bundle bundle = getIntent().getExtras();
+        Long productCode;
+        if (bundle != null && bundle.containsKey(ProductActivity.KEY_PRODUCT_CODE)) {
+            productCode = bundle.getLong(ProductActivity.KEY_PRODUCT_CODE);
+            onProductClicked(productCode);
+        }
     }
 
 }

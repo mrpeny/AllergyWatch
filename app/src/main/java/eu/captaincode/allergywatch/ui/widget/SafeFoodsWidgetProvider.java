@@ -11,7 +11,7 @@ import android.widget.RemoteViews;
 
 import eu.captaincode.allergywatch.R;
 import eu.captaincode.allergywatch.service.WidgetUpdateService;
-import eu.captaincode.allergywatch.ui.ProductActivity;
+import eu.captaincode.allergywatch.ui.MainActivity;
 
 /**
  * Implementation of App Widget functionality.
@@ -35,7 +35,6 @@ public class SafeFoodsWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
@@ -57,7 +56,7 @@ public class SafeFoodsWidgetProvider extends AppWidgetProvider {
     }
 
     private void addPendingIntentTemplate(Context context, RemoteViews views) {
-        Intent launchProductActivityIntent = new Intent(context, ProductActivity.class);
+        Intent launchProductActivityIntent = new Intent(context, MainActivity.class);
         PendingIntent launchProductActivityPendingIntent = TaskStackBuilder.create(context)
                 .addNextIntentWithParentStack(launchProductActivityIntent)
                 .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -66,12 +65,10 @@ public class SafeFoodsWidgetProvider extends AppWidgetProvider {
     }
     @Override
     public void onEnabled(Context context) {
-        // Enter relevant functionality for when the first widget is created
     }
 
     @Override
     public void onDisabled(Context context) {
-        // Enter relevant functionality for when the last widget is disabled
     }
 
 }
