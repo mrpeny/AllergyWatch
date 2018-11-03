@@ -1,0 +1,49 @@
+<resources>
+    <string name="app_name">AllergyWatch</string>
+
+    <!-- MAIN ACTIVITY -->
+    <string name="no_products_added_to_this_category">No products added to this category</string>
+
+    <!-- NAVIGATION DRAWER -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <string name="scan_food">Scan food</string>
+    <string name="safe_foods">Safe foods</string>
+    <string name="dangerous_foods">Dangerous foods</string>
+    <string name="history">History</string>
+    <string name="build_up_your_safe_food_set">Build up your safe food set!</string>
+
+
+    <!-- CAMERA -->
+    <string name="permission_request">This sample needs permission for camera and audio recording.</string>
+    <string name="camera_error">This device doesn\'t support Camera2 API.</string>
+    <string name="camera_error_general">Problem occurred while opening the camera. Pleaset try again!</string>
+
+    <!-- PRODUCT DETAIL -->
+    <string name="product_details_title">Product Details</string>
+    <string name="product_not_found">No product found with code \"%s\"</string>
+    <string name="no_allergens_found">No allergens found</string>
+    <string name="no_ingredients_found">No ingredients found</string>
+    <string name="title_activity_product">ProductActivity</string>
+    <string name="product_image_description">Product image</string>
+    <string name="ingredients_title">Ingredients</string>
+    <string name="ingredients_mock">sucre, huile de palme, \<span class="allergen">noisettes\</span> 13 %, cacao maigre 7,4 % vanilline.</string>
+    <string name="allergens_title">Allergens</string>
+    <string name="allergens_mock">Gluten,Leche,Frutos de cáscara,Soja,Frutos de cáscara,Leche,Milch,Schalenfrüchte,Sojabohnen, noisettes</string>
+    <string name="safe_button">Safe</string>
+    <string name="dangerous_button">Dangerous</string>
+    <string name="product_marked_safe">Product marked as Safe</string>
+    <string name="product_marked_dangerous">Product marked as Dangerous</string>
+
+    <!-- WIDGET -->
+    <string name="appwidget_empty_text">Mark a food as Safe to show it here</string>
+
+    <!-- ADVERTISMENT -->
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="banner_type">BANNER</string>
+
+</resources>
