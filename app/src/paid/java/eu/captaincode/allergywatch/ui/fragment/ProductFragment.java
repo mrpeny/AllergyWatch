@@ -11,8 +11,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.Objects;
 
@@ -38,6 +42,7 @@ public class ProductFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_product, container, false);
         mBinding.setLifecycleOwner(this);
+        setHasOptionsMenu(true);
 
         getExtras();
         setupViewModel();
@@ -121,6 +126,23 @@ public class ProductFragment extends Fragment {
     private void updateButtons(boolean safe) {
         mBinding.btnSafe.setEnabled(!safe);
         mBinding.btnDangerous.setEnabled(safe);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.main_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_delete:
+                Toast.makeText(getContext(), "Delete", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }

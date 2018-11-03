@@ -4,6 +4,9 @@
     <!-- MAIN ACTIVITY -->
     <string name="no_products_added_to_this_category">No products added to this category</string>
 
+    <!-- MAIN MENU -->
+    <string name="delete">Delete</string>
+
     <!-- NAVIGATION DRAWER -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -14,7 +17,6 @@
     <string name="dangerous_foods">Dangerous foods</string>
     <string name="history">History</string>
     <string name="build_up_your_safe_food_set">Build up your safe food set!</string>
-
 
     <!-- CAMERA -->
     <string name="permission_request">This sample needs permission for camera and audio recording.</string>
