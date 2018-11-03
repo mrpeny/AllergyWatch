@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,7 @@ public class MasterFragment extends Fragment {
     public static final int LIST_TYPE_HISTORY = 0;
     public static final int LIST_TYPE_SAFE = 1;
     public static final int LIST_TYPE_DANGEROUS = 2;
+    private static final String TAG = MasterFragment.class.getSimpleName();
     private static final String KEY_LIST_TYPE = "list-type";
 
     private FragmentMasterBinding mBinding;
@@ -58,6 +61,7 @@ public class MasterFragment extends Fragment {
         setTitle();
         setupViewModel();
         setupRecyclerView();
+        setupSwipeRefresh();
 
         return mBinding.getRoot();
     }
@@ -115,6 +119,30 @@ public class MasterFragment extends Fragment {
                 productListAdapter.swapData(newProducts);
             });
         }
+    }
+
+    private void setupSwipeRefresh() {
+        mBinding.swiperefresh.setOnRefreshListener(() -> {
+            new RefreshProductsTask().execute();
+        });
+    }
+
+    class RefreshProductsTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Log.i(TAG, "Refreshing database from the network...");
+            mBinding.swiperefresh.setRefreshing(true);
+            mViewModel.refreshProducts();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            Log.i(TAG, "Database network refresh finished");
+            mBinding.swiperefresh.setRefreshing(false);
+        }
+
     }
 
 }

@@ -2,7 +2,6 @@ package eu.captaincode.allergywatch.ui;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -10,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 
 import eu.captaincode.allergywatch.R;
@@ -17,13 +17,12 @@ import eu.captaincode.allergywatch.databinding.ActivityMainBinding;
 import eu.captaincode.allergywatch.ui.adapter.ProductListAdapter;
 import eu.captaincode.allergywatch.ui.fragment.MasterFragment;
 import eu.captaincode.allergywatch.ui.fragment.ProductFragment;
-import eu.captaincode.allergywatch.viewmodel.MainViewModel;
 
 public class MainActivity extends AppCompatActivity implements
         ProductListAdapter.ProductClickListener, NavigationView.OnNavigationItemSelectedListener {
 
     public static final int REQUEST_CODE_BARCODE_DETECTION = 100;
-    private static final String TAG = MainActivity.class.getSimpleName();
+    public static final String TAG = MainActivity.class.getSimpleName();
 
     private ActivityMainBinding mBinding;
     private boolean mTwoPane;
@@ -67,8 +66,10 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i(TAG, "Activity result received with resultCode: " + resultCode);
         if (requestCode == REQUEST_CODE_BARCODE_DETECTION) {
             if (resultCode == RESULT_OK) {
+                Log.i(TAG, "Barcode detection Activity result received successfully");
                 String detectedBarcode = data.getStringExtra(CameraActivity.EXTRA_BARCODE);
                 launchProductActivity(Long.valueOf(detectedBarcode));
             }
@@ -147,27 +148,6 @@ public class MainActivity extends AppCompatActivity implements
                         fragment,
                         ProductFragment.TAG_PRODUCT_FRAGMENT)
                 .commitAllowingStateLoss();
-    }
-
-}
-
-class RefreshProductsTask extends AsyncTask<Void, Void, Void> {
-    private MainViewModel mViewModel;
-
-    public RefreshProductsTask(MainViewModel viewModel) {
-        this.mViewModel = viewModel;
-    }
-
-    @Override
-    protected Void doInBackground(Void... voids) {
-        // TODO: Show swipe refresh
-        mViewModel.refreshProducts();
-        return null;
-    }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-        // TODO: Hide swipe refresh
     }
 
 }
