@@ -21,6 +21,7 @@ public class ProductActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setAllowEnterTransitionOverlap(true);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_product);
 
         setSupportActionBar(mBinding.toolbar);
@@ -28,7 +29,7 @@ public class ProductActivity extends AppCompatActivity {
         setTitle(R.string.product_details_title);
 
         Bundle bundle = getIntent().getExtras();
-        setupTransitions();
+        //setupTransitions();
         Long productCode = 0L;
         if (bundle != null && bundle.containsKey(KEY_PRODUCT_CODE)) {
             productCode = bundle.getLong(KEY_PRODUCT_CODE);

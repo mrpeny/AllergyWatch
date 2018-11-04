@@ -4,14 +4,13 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.transition.Fade;
+import android.transition.Explode;
 import android.util.Log;
 import android.view.MenuItem;
 
@@ -30,10 +29,14 @@ public class MainActivity extends AppCompatActivity implements
     private ActivityMainBinding mBinding;
     private boolean mTwoPane;
     private int mSelectedListType;
+    private boolean mStartedFromWidget;
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        setupTransitions();
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         setSupportActionBar(mBinding.toolbar);
 
@@ -41,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements
         mTwoPane = getResources().getBoolean(R.bool.isTablet);
         showMasterFragment(MasterFragment.LIST_TYPE_HISTORY);
         mBinding.fab.setOnClickListener(v -> startCameraActivityForResult());
-        setupTransitions();
         showProductIfStartedFromWidget();
     }
 
@@ -64,9 +66,10 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void setupTransitions() {
-        Fade fade = new Fade();
-        getWindow().setReenterTransition(fade);
-        getWindow().setExitTransition(fade);
+        /*getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);*/
+        Explode transition = new Explode();
+        transition.setDuration(500);
+        getWindow().setExitTransition(transition);
     }
 
     private void startCameraActivityForResult() {
@@ -142,15 +145,27 @@ public class MainActivity extends AppCompatActivity implements
         if (mTwoPane) {
             showProductFragment(code);
         } else {
-            launchProductActivity(code);
+            if (mStartedFromWidget) {
+                launchProductActivity(code, null);
+            } else {
+                launchProductActivityWithTransition(code);
+            }
         }
     }
 
-    private void launchProductActivity(Long barcode) {
+    private void launchProductActivity(Long barcode, Bundle bundle) {
         Intent launchProductActivityIntent = new Intent(this, ProductActivity.class);
         launchProductActivityIntent.putExtra(ProductActivity.KEY_PRODUCT_CODE, barcode);
+        if (bundle != null) {
+            startActivity(launchProductActivityIntent, bundle);
+        } else {
+            startActivity(launchProductActivityIntent);
+        }
+    }
+
+    private void launchProductActivityWithTransition(Long barcode) {
         Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(this).toBundle();
-        startActivity(launchProductActivityIntent, bundle);
+        launchProductActivity(barcode, bundle);
     }
 
     private void showProductFragment(Long barcode) {
@@ -167,13 +182,24 @@ public class MainActivity extends AppCompatActivity implements
                 .commitAllowingStateLoss();
     }
 
-    private void showProductIfStartedFromWidget() {
+/*    private void showProductIfStartedFromWidget() {
         Bundle bundle = getIntent().getExtras();
         Long productCode;
         if (bundle != null && bundle.containsKey(ProductActivity.KEY_PRODUCT_CODE)) {
             productCode = bundle.getLong(ProductActivity.KEY_PRODUCT_CODE);
             // Wait of transitions to be configured to avoiding NPE when started from widget
             new Handler().postDelayed(() -> showProductDetails(productCode), 500);
+
+        }
+    }*/
+
+    private void showProductIfStartedFromWidget() {
+        Bundle bundle = getIntent().getExtras();
+        Long productCode;
+        if (bundle != null && bundle.containsKey(ProductActivity.KEY_PRODUCT_CODE)) {
+            productCode = bundle.getLong(ProductActivity.KEY_PRODUCT_CODE);
+            mStartedFromWidget = true;
+            showProductDetails(productCode);
 
         }
     }
