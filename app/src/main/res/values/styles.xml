@@ -22,6 +22,135 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="DrawerStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:fitsSystemWindows">true</item>
+    </style>
+
+    <style name="MainCoordinatorLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="MainAppBarLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:theme">@style/AppTheme.AppBarOverlay</item>
+    </style>
+
+    <style name="MainToolBar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:background">?attr/colorPrimary</item>
+    </style>
+
+    <style name="MainFrameLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="MainFab">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">bottom|end</item>
+        <item name="android:layout_margin">@dimen/fab_margin</item>
+    </style>
+
+    <style name="MainNavigationView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">start</item>
+        <item name="android:fitsSystemWindows">true</item>
+    </style>
+
+    <!-- Navigation drawer styles. -->
+    <style name="NavDrawerLinearLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/nav_header_height</item>
+        <item name="android:background">@drawable/side_nav_bar</item>
+        <item name="android:gravity">bottom</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingLeft">@dimen/activity_horizontal_margin</item>
+        <item name="android:paddingTop">@dimen/activity_vertical_margin</item>
+        <item name="android:paddingRight">@dimen/activity_horizontal_margin</item>
+        <item name="android:paddingBottom">@dimen/activity_vertical_margin</item>
+        <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark</item>
+    </style>
+
+
+    <style name="NavDrawerImageView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">@dimen/nav_header_vertical_spacing</item>
+    </style>
+
+    <style name="NawDrawerTitle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">@dimen/nav_header_vertical_spacing</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body1</item>
+    </style>
+
+    <style name="NavDrawerSubTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!-- Master Fragment styles. -->
+    <style name="MasterFrameLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="MasterSwipeRefresh">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="MasterRecyclerView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+    </style>
+
+    <style name="MasterEmptyLinearLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="MasterEmptyText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <!-- Product list styles. -->
+    <style name="ProductListLinearLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:baselineAligned">false</item>
+        <item name="android:divider">?android:attr/dividerHorizontal</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:showDividers">middle</item>
+    </style>
+
+    <style name="ProductListFrameLayout">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+    </style>
+
+    <style name="ProductListDetailContainer">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
     <!-- Product list item styles. -->
     <style name="ProductItemNameTextViewStyle">
         <item name="android:layout_width">wrap_content</item>
@@ -35,6 +164,27 @@
         <item name="android:layout_marginTop">4dp</item>
     </style>
 
+    <style name="ProductListItemLinearLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/margin_product_card_view</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:padding">@dimen/padding_product_card_view</item>
+    </style>
+
+    <style name="ProductListItemImage">
+        <item name="android:layout_width">96dp</item>
+        <item name="android:layout_height">96dp</item>
+    </style>
+
+    <style name="ProductListItemNestedLinearLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
     <!-- Camera Activity theme. -->
     <style name="CameraActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowNoTitle">true</item>
@@ -43,36 +193,19 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
-    <!-- Widget themes. -->
-    <style name="SafeFoodsWidgetEmptyTextStyle">
+    <style name="CameraAutoFitTexture">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="CameraAim">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:background">@color/barcode_aim</item>
+        <item name="android:alpha">0.8</item>
+        <item name="android:layout_margin">@dimen/barcode_aim_margin</item>
+        <item name="android:layout_height">@dimen/barcode_aim_height</item>
         <item name="android:layout_gravity">center</item>
-        <item name="android:gravity">center</item>
-        <item name="android:layout_margin">@dimen/widget_padding</item>
-        <item name="android:background">@color/colorPrimary</item>
-        <item name="android:contentDescription">@string/appwidget_empty_text</item>
-        <item name="android:textSize">@dimen/widget_text_size</item>
-        <item name="android:textStyle">bold|italic</item>
-        <item name="android:textColor">@color/primaryText</item>
-    </style>
-
-    <style name="WidgetTitleStyle">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:background">@color/colorAccent</item>
-        <item name="android:padding">@dimen/widget_padding</item>
-    </style>
-
-    <style name="ProductFragmentScrollview">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_gravity">fill_vertical</item>
-        <item name="android:clipToPadding">false</item>
-        <item name="android:isScrollContainer">false</item>
+        <item name="android:backgroundTint">@color/barcode_aim</item>
     </style>
 
     <!-- Product detail themes. -->
@@ -90,6 +223,14 @@
         <item name="android:layout_height">0dp</item>
         <item name="android:background">@color/colorPrimary</item>
         <item name="android:backgroundTint">@color/colorPrimary</item>
+    </style>
+
+    <style name="ProductFragmentScrollview">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">fill_vertical</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="android:isScrollContainer">false</item>
     </style>
 
     <style name="ProductFragmentNameTextView">
@@ -152,6 +293,98 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:gravity">center</item>
+    </style>
+
+    <style name="ProductCoordinatorLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="ProductAppBarLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:theme">@style/AppTheme.AppBarOverlay</item>
+    </style>
+
+    <style name="ProductToolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:background">?attr/colorPrimary</item>
+    </style>
+
+    <style name="ProductFrameLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="ProductDivider">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">2dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:background">@color/divider</item>
+        <item name="android:backgroundTint">@color/divider</item>
+    </style>
+
+    <!-- Widget themes. -->
+    <style name="SafeFoodsWidgetEmptyTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">@dimen/widget_padding</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:contentDescription">@string/appwidget_empty_text</item>
+        <item name="android:textSize">@dimen/widget_text_size</item>
+        <item name="android:textStyle">bold|italic</item>
+        <item name="android:textColor">@color/primaryText</item>
+    </style>
+
+    <style name="WidgetTitleStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@color/colorAccent</item>
+        <item name="android:padding">@dimen/widget_padding</item>
+    </style>
+
+    <style name="WidgetLinearLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="WidgetList">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="WidgetItemLinearLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/colorPrimaryLight</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:padding">@dimen/widget_padding</item>
+    </style>
+
+    <style name="WidgetItemName">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">4</item>
+        <item name="android:textColor">@color/primaryText</item>
+    </style>
+
+    <style name="WidgetItemQuantity">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">2</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/primaryText</item>
     </style>
 
 </resources>

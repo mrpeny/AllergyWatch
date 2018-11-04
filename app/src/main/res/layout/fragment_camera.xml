@@ -19,17 +19,10 @@
 
         <eu.captaincode.allergywatch.ui.AutoFitTextureView
             android:id="@+id/texture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            style="@style/CameraAutoFitTexture" />
 
         <View
             android:id="@+id/video"
-            android:layout_width="match_parent"
-            android:background="@color/barcode_aim"
-            android:alpha="0.8"
-            android:layout_margin="@dimen/barcode_aim_margin"
-            android:layout_height="@dimen/barcode_aim_height"
-            android:layout_gravity="center"
-            android:backgroundTint="@color/barcode_aim" />
+            style="@style/CameraAim" />
 
 </FrameLayout>

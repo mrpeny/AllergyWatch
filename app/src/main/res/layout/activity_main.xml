@@ -6,33 +6,23 @@
 
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
+        style="@style/DrawerStyle"
         tools:openDrawer="start">
 
-        <android.support.design.widget.CoordinatorLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <android.support.design.widget.CoordinatorLayout style="@style/MainCoordinatorLayout">
 
-            <android.support.design.widget.AppBarLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:theme="@style/AppTheme.AppBarOverlay">
+            <android.support.design.widget.AppBarLayout style="@style/MainAppBarLayout">
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="?attr/colorPrimary"
+                    style="@style/MainToolBar"
                     app:popupTheme="@style/AppTheme.PopupOverlay" />
 
             </android.support.design.widget.AppBarLayout>
 
             <FrameLayout
                 android:id="@+id/mainFrameLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                style="@style/MainFrameLayout"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
                 <include
@@ -43,21 +33,15 @@
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="@dimen/fab_margin"
+                style="@style/MainFab"
                 app:srcCompat="@android:drawable/ic_menu_camera" />
 
         </android.support.design.widget.CoordinatorLayout>
 
         <android.support.design.widget.NavigationView
             android:id="@+id/nav_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:fitsSystemWindows="true"
             app:headerLayout="@layout/nav_header_base"
+            style="@style/MainNavigationView"
             app:menu="@menu/activity_base_drawer" />
 
     </android.support.v4.widget.DrawerLayout>

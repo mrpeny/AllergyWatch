@@ -42,8 +42,4 @@
     <!-- WIDGET -->
     <string name="appwidget_empty_text">Mark a food as Safe to show it here</string>
 
-    <!-- ADVERTISEMENT -->
-    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="banner_type">BANNER</string>
-
 </resources>

@@ -12,38 +12,28 @@
             type="eu.captaincode.allergywatch.viewmodel.MainViewModel" />
     </data>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <FrameLayout style="@style/MasterFrameLayout">
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swiperefresh"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            style="@style/MasterSwipeRefresh">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_product_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:visibility="@{safeUnbox(mainViewModel.isListEmpty) ? View.GONE : View.VISIBLE}"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                style="@style/MasterRecyclerView"
+                android:visibility="@{safeUnbox(mainViewModel.isListEmpty) ? View.GONE : View.VISIBLE}"
                 tools:listitem="@layout/product_list_item" />
 
         </android.support.v4.widget.SwipeRefreshLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            style="@style/MasterEmptyLinearLayout"
             android:visibility="@{safeUnbox(mainViewModel.isListEmpty) ? View.VISIBLE : View.GONE}">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
                 android:text="@{@string/no_products_added_to_this_category}"
+                style="@style/MasterEmptyText"
                 tools:text="@string/no_products_added_to_this_category" />
         </LinearLayout>
     </FrameLayout>

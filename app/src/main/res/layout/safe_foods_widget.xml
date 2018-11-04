@@ -1,9 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ll_appwidget_root"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    android:orientation="vertical">
+    style="@style/WidgetLinearLayout">
 
     <TextView
         style="@style/WidgetTitleStyle"
@@ -11,8 +8,7 @@
 
     <ListView
         android:id="@+id/lv_safe_foods_widget_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        style="@style/WidgetList" />
 
     <TextView
         android:id="@+id/appwidget_empty_text"

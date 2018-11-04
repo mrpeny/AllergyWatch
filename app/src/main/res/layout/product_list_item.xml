@@ -1,24 +1,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/margin_product_card_view"
-    android:orientation="horizontal"
-    android:padding="@dimen/padding_product_card_view">
+    style="@style/ProductListItemLinearLayout">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_product_list_item"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
+        style="@style/ProductListItemImage"
         tools:src="@drawable/hazelnuts" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="8dp"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
+    <LinearLayout style="@style/ProductListItemNestedLinearLayout">
 
         <TextView
             android:id="@+id/tv_product_item_name"
@@ -28,8 +17,6 @@
         <TextView
             android:id="@+id/tv_product_item_barcode"
             style="@style/ProductItemBarcodeTextViewStyle"
-            app:layout_constraintStart_toStartOf="@+id/tv_product_item_name"
-            app:layout_constraintTop_toBottomOf="@+id/tv_product_item_name"
             tools:text="3017620429484" />
 
     </LinearLayout>

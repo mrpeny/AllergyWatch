@@ -4,30 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        style="@style/ProductListLinearLayout"
         android:baselineAligned="false"
-        android:divider="?android:attr/dividerHorizontal"
-        android:orientation="horizontal"
-        android:showDividers="middle"
         tools:context=".ui.MainActivity">
 
         <FrameLayout
             android:id="@+id/frameLayout"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
+            style="@style/ProductListFrameLayout"
             android:layout_weight="1"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:listitem="@layout/product_list_item" />
 
         <FrameLayout
             android:id="@+id/product_detail_container"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            style="@style/ProductListDetailContainer"
             android:layout_weight="2" />
 
     </LinearLayout>
