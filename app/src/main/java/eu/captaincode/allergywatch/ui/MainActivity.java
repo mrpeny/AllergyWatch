@@ -1,5 +1,6 @@
 package eu.captaincode.allergywatch.ui;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.Fade;
 import android.util.Log;
 import android.view.MenuItem;
 
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements
         mTwoPane = getResources().getBoolean(R.bool.isTablet);
         showMasterFragment(MasterFragment.LIST_TYPE_HISTORY);
         mBinding.fab.setOnClickListener(v -> startCameraActivityForResult());
-        showProductStartedFromWidget();
+        setupTransitions();
     }
 
     private void setupNavigationDrawer() {
@@ -57,6 +59,12 @@ public class MainActivity extends AppCompatActivity implements
         getSupportFragmentManager().beginTransaction()
                 .replace(mBinding.inclProductList.frameLayout.getId(), fragment, null)
                 .commit();
+    }
+
+    private void setupTransitions() {
+        Fade fade = new Fade();
+        getWindow().setReenterTransition(fade);
+        getWindow().setExitTransition(fade);
     }
 
     private void startCameraActivityForResult() {
@@ -139,7 +147,8 @@ public class MainActivity extends AppCompatActivity implements
     private void launchProductActivity(Long barcode) {
         Intent launchProductActivityIntent = new Intent(this, ProductActivity.class);
         launchProductActivityIntent.putExtra(ProductActivity.KEY_PRODUCT_CODE, barcode);
-        startActivity(launchProductActivityIntent);
+        Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(this).toBundle();
+        startActivity(launchProductActivityIntent, bundle);
     }
 
     private void showProductFragment(Long barcode) {

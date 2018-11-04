@@ -6,6 +6,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -21,12 +23,6 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-    <style name="DrawerStyle">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:fitsSystemWindows">true</item>
-    </style>
 
     <style name="MainCoordinatorLayout">
         <item name="android:layout_width">match_parent</item>
@@ -65,6 +61,12 @@
     </style>
 
     <!-- Navigation drawer styles. -->
+    <style name="DrawerStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:fitsSystemWindows">true</item>
+    </style>
+
     <style name="NavDrawerLinearLayout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/nav_header_height</item>

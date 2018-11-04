@@ -3,6 +3,9 @@ package eu.captaincode.allergywatch.ui;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.Slide;
+import android.view.Gravity;
+import android.view.MenuItem;
 
 import java.util.Objects;
 
@@ -33,6 +36,7 @@ public class ProductActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             showProductFragment(productCode);
         }
+        setupTransitions();
     }
 
     private void showProductFragment(Long barcode) {
@@ -46,4 +50,20 @@ public class ProductActivity extends AppCompatActivity {
                 .commitAllowingStateLoss();
     }
 
+    private void setupTransitions() {
+        Slide slide = new Slide();
+        slide.setSlideEdge(Gravity.END);
+        getWindow().setEnterTransition(slide);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
