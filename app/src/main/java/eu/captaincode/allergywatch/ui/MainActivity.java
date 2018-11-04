@@ -4,6 +4,7 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements
         showMasterFragment(MasterFragment.LIST_TYPE_HISTORY);
         mBinding.fab.setOnClickListener(v -> startCameraActivityForResult());
         setupTransitions();
+        showProductIfStartedFromWidget();
     }
 
     private void setupNavigationDrawer() {
@@ -165,12 +167,14 @@ public class MainActivity extends AppCompatActivity implements
                 .commitAllowingStateLoss();
     }
 
-    private void showProductStartedFromWidget() {
+    private void showProductIfStartedFromWidget() {
         Bundle bundle = getIntent().getExtras();
         Long productCode;
         if (bundle != null && bundle.containsKey(ProductActivity.KEY_PRODUCT_CODE)) {
             productCode = bundle.getLong(ProductActivity.KEY_PRODUCT_CODE);
-            showProductDetails(productCode);
+            // Wait of transitions to be configured to avoiding NPE when started from widget
+            new Handler().postDelayed(() -> showProductDetails(productCode), 500);
+
         }
     }
 

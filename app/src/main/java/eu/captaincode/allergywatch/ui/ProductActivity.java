@@ -28,15 +28,14 @@ public class ProductActivity extends AppCompatActivity {
         setTitle(R.string.product_details_title);
 
         Bundle bundle = getIntent().getExtras();
+        setupTransitions();
         Long productCode = 0L;
         if (bundle != null && bundle.containsKey(KEY_PRODUCT_CODE)) {
             productCode = bundle.getLong(KEY_PRODUCT_CODE);
         }
-
         if (savedInstanceState == null) {
             showProductFragment(productCode);
         }
-        setupTransitions();
     }
 
     private void showProductFragment(Long barcode) {
