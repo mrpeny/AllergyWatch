@@ -11,10 +11,21 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    // Custom signing configuration
+    signingConfigs {
+        config {
+            keyAlias 'allergywatch'
+            keyPassword 'AllergyWatchUda2018'
+            storeFile file('../udakeystore.jks')
+            storePassword 'UdaKeystorePass2018'
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // Setting custom signing configuration for release build types
+            signingConfig signingConfigs.config
         }
     }
     dataBinding {
@@ -24,26 +35,17 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    signingConfigs {
-        config {
-            keyAlias 'allergywatch'
-            keyPassword 'AllergyWatchUda2018'
-            storeFile file('../udakeystore.jks')
-            storePassword 'UdaKeystorePass2018'
-        }
-    }
+
     flavorDimensions "full"
 
     productFlavors {
         free {
             dimension "full"
             applicationId "eu.captaincode.allergywatch.free"
-            signingConfig signingConfigs.config
         }
         paid {
             dimension "full"
             applicationId "eu.captaincode.allergywatch.paid"
-            signingConfig signingConfigs.config
         }
     }
 }
