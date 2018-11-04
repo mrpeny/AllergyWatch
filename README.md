@@ -25,3 +25,13 @@ The App starts with 2 initial Products saved into the database that will be upda
 when the system recognizes them as outdated. Considering the "single source of truth" pattern
 data is always shown from the database and regularly updated through the network. This feature
 can be disabled via commenting out the `MyDatabase.insertInitialData()` method.
+
+# Screenshots
+
+|Camera capture              |  Found Product            |       Navigation           |
+| :-------------------------:|:-------------------------:|:-------------------------: |
+| ![](https://github.com/mrpeny/AllergyWatch/blob/master/assets/allergywatch1.png)  |  ![](https://github.com/mrpeny/AllergyWatch/blob/master/assets/allergywatch5.png)  | ![](https://github.com/mrpeny/AllergyWatch/blob/master/assets/allergywatch3.png) |
+
+| Safe food list             |  Found Product            | 
+| :-------------------------:|:-------------------------:|
+| ![](https://github.com/mrpeny/AllergyWatch/blob/master/assets/allergywatch4.png)  |  ![](https://github.com/mrpeny/AllergyWatch/blob/master/assets/allergywatch2.png)  |
