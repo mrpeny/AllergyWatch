@@ -25,8 +25,6 @@ import eu.captaincode.allergywatch.database.entity.ProductRating;
 public abstract class MyDatabase extends RoomDatabase {
 
     private static final String DATABASE_NAME = "allergy_watch_db.db";
-    // TODO: Remove from release version
-    private static final Long CODE_PRODUCT = 3017620429484L;
     private static final Object LOCK = new Object();
     private static MyDatabase sInstance;
     private MutableLiveData<Boolean> mIsDatabaseCreated = new MutableLiveData<>();
@@ -49,10 +47,7 @@ public abstract class MyDatabase extends RoomDatabase {
                     @Override
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {
                         executors.diskIO().execute(() -> {
-                            try {
-                                Thread.sleep(4000);
-                            } catch (InterruptedException ignored) {
-                            }
+                            // TODO: Comment this to prevent inserting initial data into the DB
                             insertInitialData(context, executors);
                         });
                     }
@@ -62,16 +57,16 @@ public abstract class MyDatabase extends RoomDatabase {
     private static void insertInitialData(Context context, AppExecutors executors) {
         final MyDatabase database = MyDatabase.getInstance(context.getApplicationContext(), executors);
         database.runInTransaction(() -> {
-            Product product = new Product();
-            product.setProductName("Fake Nutella");
-            product.setLastRefresh(new Date());
-            product.setCode(CODE_PRODUCT);
+            Product kitKat = new Product();
+            kitKat.setProductName("Locally persisted Kitkat");
+            kitKat.setLastRefresh(new Date());
+            kitKat.setCode(7613034968340L);
 
-            Product product2 = new Product();
-            product2.setProductName("Fake Banana");
-            product2.setLastRefresh(new Date());
-            product2.setCode(123456789L);
-            database.productDao().saveBoth(product, product2);
+            Product nutella = new Product();
+            nutella.setProductName("Nutella to refresh");
+            nutella.setLastRefresh(new Date());
+            nutella.setCode(80177128L);
+            database.productDao().saveBoth(kitKat, nutella);
         });
     }
 
